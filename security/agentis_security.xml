@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+     <record model="ir.module.category" id="module_agentis">
+         <field name="name">Agentis</field>
+         <field name="description">category pour agentis</field>
+         <field name="sequence">20</field>
+     </record>
+
+    <record id="agentis_users" model="res.groups">
+         <field name="name">Office manager users</field>
+         <field name="category_id" ref="module_agentis"/>
+     </record>
+    <record id="agentis_dga_users" model="res.groups">
+         <field name="name">DGA Users</field>
+         <field name="category_id" ref="module_agentis"/>
+     </record>
+    <record id="agentis_dga_prive" model="res.groups">
+         <field name="name">DGA Privé</field>
+         <field name="category_id" ref="module_agentis"/>
+     </record>
+
+    <record id="agentis_dga" model="res.groups">
+         <field name="name">DGA</field>
+         <field name="category_id" ref="module_agentis"/>
+        <!--<field name="implied_ids" eval="[(4, ref('agentis_office_manager')), (4, ref('agentis_office_manager_prive'))]"/> -->
+     </record>
+
+    <record id="agentis_office_manager" model="res.groups">
+         <field name="name">Office manager</field>
+         <field name="category_id" ref="module_agentis"/>
+     </record>
+
+    <record id="agentis_office_manager_prive" model="res.groups">
+         <field name="name">Office manager prive</field>
+         <field name="category_id" ref="module_agentis"/>
+     </record>
+
+    <record id="agentis_agentis_comptable" model="res.groups">
+         <field name="name">Mouvement Banque</field>
+         <field name="category_id" ref="module_agentis"/>
+     </record>
+    <!--
+    <record model="ir.rule" id="record_not_shared_multi_company_office_manager_rule">
+        <field name="name">Office Manager Multi Company rule</field>
+        <field name="model_id" ref="model_office_manager"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">
+            ['|', ('company_id', '=', False),('company_id', 'in', company_ids)]
+        </field>
+    </record>
+    <record model="ir.rule" id="record_not_shared_multi_company_agentis_dga_rule">
+        <field name="name">DGA Multi Company rule</field>
+        <field name="model_id" ref="model_agentis_dga"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">
+            ['|', ('company_id', '=', False),('company_id', 'in', company_ids)]
+        </field>
+    </record> -->
+    <record model="ir.rule" id="record_not_shared_multi_company_agentis_comptable_rule">
+        <field name="name">Comptable Multi Company rule</field>
+        <field name="model_id" ref="model_agentis_comptable"/>
+        <field name="global" eval="True"/>
+        <field name="domain_force">
+            ['|', ('company_id', '=', False),('company_id', 'in', company_ids)]
+        </field>
+    </record>
+
+
+
+
+</odoo>

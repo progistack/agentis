@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="consolidated_body_tree" model="ir.ui.view">
+        <field name="name">consolidated.box.tree</field>
+        <field name="model">consolidated.body</field>
+        <field name="arch" type="xml">
+            <tree string="rapport" create="false" delete="false">
+                <field name="create_date" width="1"/>
+                <field name="libele" width="1"/>
+                <field name="name" width="1"/>
+                <field name="somme" width="1" optional="show"/>
+                <field name="partner_id" width="1" optional="show"/>
+                <field name="bank_reception" width="1" optional="hide"/>
+                <field name="chantier_id" width="1" optional="show"/>
+                <field name="methode_payment" width="1" optional="hide"/>
+                <field name="type_operation" width="1" optional="hide"/>
+                <field name="user_id" width="1" optional="show"/>
+                <field name="move_id" width="1" optional="hide"/>
+                <field name="nature_operation" width="1" optional="show"/>
+                <field name="company_id" width="1" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_consolidated_body_search" model="ir.ui.view">
+            <field name="name">consolidated.body.search</field>
+            <field name="model">consolidated.body</field>
+            <field name="arch" type="xml">
+                <search string="search">
+                    <separator orientation="vertical"/>
+                    <filter string="Date de Création" name="create_date" date="create_date" default_period="this_year"/>
+                    <separator orientation="vertical"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Société" name="company_id" context="{'group_by':'company_id'}"/>
+                        <filter string="Projet" name="chantier_id" context="{'group_by':'chantier_id'}"/>
+                        <filter string="Crée par" name="user_id" context="{'group_by':'user_id'}"/>
+                        <filter string="Bénéficiaire" name="partner_id" context="{'group_by':'partner_id'}"/>
+                        <filter string="Nature de l'opération" name="nature_operation" context="{'group_by':'nature_operation'}"/>
+                    </group>
+                </search>
+            </field>
+    </record>
+
+    <record id="action_consolidated_body" model="ir.actions.act_window">
+        <field name="name">Rapport consolidée</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">consolidated.body</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+
+     <menuitem id="agentis.menu_account_analyse_report"
+               name="Rapport consolidé"
+               parent="account.menu_finance_reports"
+               sequence="-1"/>
+    <menuitem id="menu_consolidated_body"
+              name="Rapport Consolidée de trésorerie"
+              parent="agentis.menu_account_analyse_report" sequence="1"
+              action="action_consolidated_body"/>
+
+
+</odoo>

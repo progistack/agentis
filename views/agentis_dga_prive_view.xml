@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_agentis_dga_prive_tree" model="ir.ui.view">
+        <field name="name">agentis.dga.tree</field>
+        <field name="model">agentis.dga</field>
+        <field name="arch" type="xml">
+            <tree string="Listes" js_class="dga_list_dashboard">
+                <field name="name" width="1"/>
+                <field name="libele" width="2" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="nature_payment" width="1" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="payment_with" width="1" invisible="1" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="beneficiaire_employee" width="1" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="check_in_out" width="1"/>
+                <field name="somme" width="1"/>
+                <field name="chantier_id" width="1" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="create_date" width="1" />
+                <field name="update" width="1" invisible="1" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="update_by" width="1" invisible="1" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="prive" width="1" invisible="1" attrs="{'invisible':[('is_create', '=', True)]}"/>
+                <field name="somme_in" invisible="1"/>
+                <field name="somme_out" invisible="1"/>
+                <field name="is_create" invisible="1"/>
+                <field name="solde" optional="show" attrs="{'invisible':[('is_create', '=', True)]}"
+                       sum="Total Entrée/Sortie" widget='monetary' options="{'currency_field': 'currency_id'}"
+                       decoration-bf="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_agentis_dga_prive_tree_action" model="ir.actions.act_window">
+        <field name="name">Caisse Principale</field>
+        <field name="res_model">agentis.dga</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('prive', '!=', True)]</field>
+        <field name="view_id" ref="view_agentis_dga_prive_tree"/>
+    </record>
+
+    <menuitem id="agentis.menu_account_caisse_agentis_dga_prive" name="Caisse Principale" parent="agentis.menu_account_caisse"
+               action="view_agentis_dga_prive_tree_action" groups="agentis.agentis_dga_prive"/>
+
+</odoo>

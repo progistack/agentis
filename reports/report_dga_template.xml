@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="agentis_dga_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+
+                    <link rel="stylesheet" href="/agentis/static/src/css/agentisAnalytique.css"/>
+                    <div class="page">
+                        <t t-if="o.prive">
+
+                        </t>
+                        <t t-else="">
+                            <t t-if="o.company_id.logo">
+                                <div class="col-3 mb4">
+                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                         style="max-height: 45px;" alt="Logo"/>
+                                </div>
+                            </t>
+                            <div class="container">
+                                <div class="whereClient">
+                                    <label style="width:200px;">N° DU MVT CAISSE:</label>
+                                    <small style="">
+                                        <span t-field="o.sudo().name"/>
+                                    </small>
+                                    <br/>
+                                    <label style="width:200px;">MONTANT MVT CAISSE:</label>
+                                    <small style="">
+                                        <span t-esc="o.sudo().somme_char"/>
+                                    </small>
+                                    <br/>
+                                </div>
+                                <div class="whereGroup">
+                                    <label style="width:200px;margin-top:5px;">type de mouvement:</label>
+                                    <small style="">
+                                        <span t-field="o.sudo().check_in_out"/>
+                                    </small>
+                                    <br/>
+                                    <label style="width:200px;margin-top:5px;">A Abidjan le:</label>
+                                    <span t-field="o.sudo().create_date"/>
+                                    <br/>
+                                    <label style="width:200px;margin-top:5px;">Caisse:</label>Caisse Principale
+                                    <br/>
+
+                                    <t t-if="o.sudo().beneficiaire_is_fournisseur">
+
+                                        <label style="width:200px;margin-top:5px;">bénéficiare:</label>
+                                        <span t-field="o.sudo().beneficiaire_is_fournisseur.name"/>
+                                        <br/>
+                                    </t>
+                                    <t t-if="o.sudo().beneficiaire_employee">
+
+                                        <label style="width:200px;margin-top:5px;">bénéficiare:</label>
+                                        <span t-field="o.sudo().beneficiaire_employee.name"/>
+                                        <br/>
+                                    </t>
+                                    <label style="width:200px;margin-top:5px;">Projet:</label>
+                                    <span t-field="o.sudo().chantier_id.name"/>
+                                    <br/>
+                                    <label style="width:200px;margin-top:5px;">societé:</label>
+                                    <span t-field="o.sudo().company_id.name"/>
+                                    <br/>
+                                    <label style="width:200px;margin-top:5px;">Motif:</label>
+                                    <span t-field="o.sudo().libele"/>
+                                    <br/>
+                                    <label style="width:200px;margin-top:5px;">Somme en lettre:</label>
+                                    <span t-field="o.sudo().somme_lettre"/>
+                                    <br/>
+                                </div>
+                            </div>
+
+                            <div class="float-left" style="margin-left:90px;margin-top:15px;">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="tds"
+                                                style="text-decoration: underline dotted;margin-right:50px;">signature
+                                                bénéficiaire:
+                                            </td>
+                                            <td></td>
+                                            <td class="tds" style="text-decoration: underline dotted;">signature et
+                                                cachet caisse:
+                                            </td>
+                                        </tr>
+                                        <td class="tds">
+                                            <div class="col-3 mb4">
+                                                <img t-if="o.digital_signature"
+                                                     t-att-src="image_data_uri(o.digital_signature)"
+                                                     style="max-height: 45px;" alt="Logo"/>
+                                            </div>
+                                        </td>
+
+                                    </tbody>
+                                </table>
+                                <!--<div class="col-3 mb4">
+                                    <img t-if="o.digital_signature" t-att-src="image_data_uri(o.digital_signature)" style="max-height: 45px;" alt="Logo"/>
+                                </div>-->
+                            </div>
+
+                            <!--<div class="col-3 mb4">
+                                <img t-if="o.digital_signature" t-att-src="image_data_uri(o.digital_signature)" style="max-height: 45px;" alt="Logo"/>
+                            </div>-->
+                        </t>
+                    </div>
+
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="agentis_office_manager_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page" style="margin-top:-20px;">
+                            <t t-if="o.company_id.logo">
+                                <div class="col-3 mb4">
+                                    <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                         style="max-height: 45px;" alt="Logo"/>
+                                </div>
+                            </t>
+                            <link rel="stylesheet" href="/agentis/static/src/css/agentis_dga.css"/>
+                            <!--top left box-->
+                            <div class="float-right" style="margin-top:-5px;">
+                                <table class="styled-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="text-transform:uppercase; text-align:center;background:#BFC9CA;">
+                                                <span t-field="o.sudo().check_in_out"/>
+                                                de caisse
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr style="margin-left:5px;">
+                                            <td>N° DU MVT CAISSE:
+                                                <span t-field="o.sudo().name"/>
+                                            </td>
+                                        </tr>
+                                        <tr class="active-row" style="margin-left:5px;">
+                                            <td>MONTANT MVT CAISSE:
+                                                <span t-esc="o.sudo().somme_char"/>
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!--end box-->
+
+
+                            <div class="float-left" style="margin-left:90px;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="3" class="th"
+                                                style="text-transform:uppercase; text-align:center;background:#BFC9CA;">
+                                                type
+                                                de mouvement :
+                                                <span t-field="o.check_in_out"/>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td class="td">A Abidjan le:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().create_date"/>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="td">Caisse:</td>
+                                            <td class="tdd">Caisse secondaire</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="td">Par intermédiaire de:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().payment_with_other.name"/>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <t t-if="o.sudo().beneficiaire_is_fournisseur">
+                                            <tr>
+                                                <td class="td">bénéficiare:</td>
+                                                <td class="tdd">
+                                                    <span t-field="o.sudo().beneficiaire_is_fournisseur.name"/>
+                                                </td>
+                                                <td></td>
+
+                                            </tr>
+                                        </t>
+                                        <t t-if="o.sudo().beneficiaire_employee">
+                                            <tr>
+                                                <td class="td">bénéficiare:</td>
+                                                <td class="tdd">
+                                                    <span t-field="o.sudo().beneficiaire_employee.name"/>
+                                                </td>
+                                                <td></td>
+
+                                            </tr>
+                                        </t>
+                                        <tr>
+                                            <td class="td">chantier:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().chantier_id.name"/>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="td">societe:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().company_id.name"/>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="td">Motif:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().libele"/>
+                                            </td>
+                                            <td class="td"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="td">N° Facture:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().num_facture"/>
+                                            </td>
+                                            <td class="td"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="td">somme en lettre:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().somme_lettre"/>
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tds" style="text-decoration: underline dotted;">signature
+                                                bénéficiaire:
+                                            </td>
+                                            <td></td>
+                                            <td class="tds" style="text-decoration: underline dotted;">signature et
+                                                cachet
+                                                caisse:
+                                            </td>
+                                        </tr>
+                                        <td class="tds">
+                                            <div class="col-3 mb4">
+                                                <img t-if="o.digital_signature"
+                                                     t-att-src="image_data_uri(o.digital_signature)"
+                                                     style="max-height: 45px;" alt="Logo"/>
+                                            </div>
+                                        </td>
+
+                                    </tbody>
+                                </table>
+                                <!--<div class="col-3 mb4">
+                                    <img t-if="o.digital_signature" t-att-src="image_data_uri(o.digital_signature)" style="max-height: 45px;" alt="Logo"/>
+                                </div>-->
+                            </div>
+
+                            <!--<div class="col-3 mb4">
+                                <img t-if="o.digital_signature" t-att-src="image_data_uri(o.digital_signature)" style="max-height: 45px;" alt="Logo"/>
+                            </div>-->
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="agentis_agentis_comptable_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+
+                    <link rel="stylesheet" href="/agentis/static/src/css/agentis_dga.css"/>
+                    <!--beginning of page template-->
+                    <div class="page" style="margin-top:-20px;">
+                        <div class="float-right">
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th style="text-transform:uppercase; text-align:center;background:#BFC9CA;">
+                                            <span t-field="o.sudo().check_in_out"/>
+                                            de caisse
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="margin-left:5px;">
+                                        <td>N° DU MVT CAISSE:
+                                            <span t-field="o.sudo().name"/>
+                                        </td>
+                                    </tr>
+                                    <tr class="active-row" style="margin-left:5px;">
+                                        <td>MONTANT MVT CAISSE:
+                                            <span t-esc="o.sudo().somme_char"/>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+
+                        <div class="float-left" style="margin-left:90px;">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3" class="th"
+                                            style="text-transform:uppercase; text-align:center;background:#BFC9CA;">type
+                                            de mouvement :
+                                            <span t-field="o.check_in_out"/>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="td">A Abidjan le:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().create_date"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">Caisse:</td>
+                                        <td class="tdd">Mouvement bancaire</td>
+                                        <td></td>
+                                    </tr>
+                                    <!--news-->
+                                    <tr>
+                                        <td class="td">Banque:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().bank_reception"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">NUMERO DE CHEQUE:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.num_piece"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">methode de paiement:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().methode_payment"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">chantier:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().chantier_id.name"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">numéro de convention:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().chantier_id.code"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">numéro de contrat:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().num_contrat.name"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">Société:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().company_id.name"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">Motif:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().libele"/>
+                                        </td>
+                                        <td class="td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">N° Facture:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().num_facture"/>
+                                        </td>
+                                        <td class="td"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="td">somme en lettre:</td>
+                                        <td class="tdd">
+                                            <span t-field="o.sudo().somme_lettre"/>
+                                        </td>
+                                        <td></td>
+                                    </tr>
+                                    <!--end news-->
+                                    <t t-if="o.sudo().beneficiaire_is_client">
+                                        <tr>
+                                            <td class="td">bénéficiare:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().beneficiaire_is_client.name"/>
+                                            </td>
+                                            <td></td>
+
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.sudo().beneficiaire_is_fournisseur">
+                                        <tr>
+                                            <td class="td">bénéficiare:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().beneficiaire_is_fournisseur.name"/>
+                                            </td>
+                                            <td></td>
+
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.sudo().beneficiaire_employee">
+                                        <tr>
+                                            <td class="td">bénéficiare:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().beneficiaire_employee.name"/>
+                                            </td>
+                                            <td></td>
+
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.sudo().beneficiaire_is_other">
+                                        <tr>
+                                            <td class="td">bénéficiare:</td>
+                                            <td class="tdd">
+                                                <span t-field="o.sudo().beneficiaire_is_other.name"/>
+                                            </td>
+                                            <td></td>
+
+                                        </tr>
+                                    </t>
+
+                                    <tr>
+                                        <td class="tds">Signature bénéficiaire:</td>
+                                        <td></td>
+                                        <td class="tds">Signature et cachet caisse:</td>
+                                    </tr>
+
+                                    <td class="tds">
+                                        <div class="col-3 mb4">
+                                            <img t-if="o.digital_signature"
+                                                 t-att-src="image_data_uri(o.digital_signature)"
+                                                 style="max-height: 45px;" alt="Logo"/>
+                                        </div>
+                                    </td>
+
+
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

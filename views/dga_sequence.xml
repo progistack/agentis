@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="dga_principal_sequence" model="ir.sequence">
+        <field name="name">Mouvement Principale</field>
+        <field name="code">DGA.sequence</field>
+        <field name="prefix">CP</field>
+        <field name="padding">7</field>
+    </record>
+</odoo>

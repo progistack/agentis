@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_bank_form" model="ir.ui.view">
+        <field name="name">charge.transfer.form</field>
+        <field name="model">charge.transfer</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="charge_transfer" style="margin-left:25px;margin-top:25px;" type="object" string="Transférer la charge" class="oe_highlight"/>
+                    <button type="object" style="margin-top:25px;margin-left:10px" string="Annuler" special="cancel" data-hotkey="z" class="btn-secondary"/>
+                </header>
+
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                        </group>
+                        <group>
+                            <field name="partner_id_init"/>
+                            <field name="partner_id_final"/>
+                        </group>
+                        <group>
+                            <field name="chantier_id_init"/>
+                            <field name="chantier_id_final"/>
+                        </group>
+                        <group>
+                             <field name="date" readonly="1"/>
+                        </group>
+                    </group>
+
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_charge_transfer_tree" model="ir.ui.view">
+        <field name="name">charge.transfer.tree</field>
+        <field name="model">charge.transfer</field>
+        <field name="arch" type="xml">
+            <tree >
+                <field name="name" width="1.6"/>
+                <field name="partner_id_init"/>
+                <field name="partner_id_final"/>
+                <field name="chantier_id_init"/>
+                <field name="chantier_id_final"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_charge_transfer_tree_action" model="ir.actions.act_window">
+        <field name="name">Transfert de charges</field>
+        <field name="res_model">charge.transfer</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_charge_transfer_tree"/>
+    </record>
+
+    <menuitem id="agentis.menu_account_transfer_charge" name="Transfert de Charges" parent="agentis.menu_chantier_config" sequence="3"
+               action="view_charge_transfer_tree_action"/>
+</odoo>

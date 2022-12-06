@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record id="view_consolidated_box_tree" model="ir.ui.view">
+        <field name="name">consolidated.box.tree</field>
+        <field name="model">consolidated.box</field>
+        <field name="arch" type="xml">
+            <tree string="Listes">
+                <field name="name" width="1"/>
+                <field name="libele" width="1" />
+                <field name="num_facture" width="1" string="num fact"/>
+                <field name="nature" width="1" string="nature opération" optional="show"/>
+                <field name="company_id" width="1"/>
+                <field name="journal_id" optional="hide" width="1" string="nat pay"/>
+                <field name="payment_with_other" width="1" optional="hide" string="cl/fourn"/>
+                <field name="beneficiaire_employee" width="1" optional="hide" widget="many2one_avatar_employee"/>
+                <field name="beneficiaire_is_fournisseur" string="Béneficiaire" optional="hide"/>
+                <field name="check_in_out" width="1" optional="hide"/>
+                <field name="somme" width="1" optional="show"/>
+                <field name="chantier_id" width="1"/>
+                <field name="create_date" width="1"/>
+                <field name="date_prevue" width="1" optional="show"/>
+                <field name="update" width="1" optional="hide"/>
+                <field name="update_by" width="1" optional="hide"/>
+                <field name="visibility" width="1" invisible="1" optional="hide"/>
+                <field name="solde" optional="show" sum="Total Entrée/Sortie" widget='monetary' options="{'currency_field': 'currency_id'}" decoration-bf="True"/>
+                <field name="status" widget="badge" string="Statut" decoration-info="status == 'brouillon'" decoration-success="status == 'valide'" decoration-warning="status == 'attente'"/>
+                <button type="object" icon="fa-trash" name="unlink" confirm="Voulez-vous réellement supprimer cette ligne"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_consolidated_box_form" model="ir.ui.view">
+        <field name="name">consolidated.box.form</field>
+        <field name="model">consolidated.box</field>
+        <field name="arch" type="xml" >
+            <form string="Attendance" >
+                <field name="name" width="1"/>
+                <field name="libele" width="1" />
+                <field name="num_facture" width="1" string="num fact"/>
+                <field name="nature" width="1" string="nature opération" optional="show"/>
+                <field name="company_id" width="1"/>
+                <field name="journal_id" optional="hide" width="1" string="nat pay"/>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_consolidated_box" model="ir.actions.act_window">
+        <field name="name">Caisse Consolidée</field>
+        <field name="res_model">consolidated.box</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree</field>
+         <field name="context">{'search_default_date':1}</field>
+        <field name="view_id" ref="view_consolidated_box_tree"/>
+    </record>
+
+    <menuitem id="agentis.menu_account_caisse_consolidated" name="Caisse Consolidée" parent="agentis.menu_account_caisse" sequence="4"
+               action="action_consolidated_box" groups="agentis.agentis_office_manager,agentis.agentis_dga"/>
+
+</odoo>

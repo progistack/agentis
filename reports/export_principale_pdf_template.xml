@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="agentis_principale_pdf">
+        <t t-call="web.html_container">
+            <t t-call="web.basic_layout">
+
+                <link rel="stylesheet" href="/agentis/static/src/css/agentisAnalytique.css"/>
+                <div class="page">
+                    <div class="container">
+
+                        <div class="tableClass">
+                            <div style="margin-top:50px;">
+                                <table class="table table-bordered" style="border: 2px solid #32a1ce;">
+                                        <thead style="font-size:10px;">
+                                            <tr>
+                                                <th name="th_date" style="max-width:68px;">
+                                                    <span>DATE</span>
+                                                </th>
+                                                <th name="th_date" style="max-width:62px;">
+                                                    <span>CODE MVT</span>
+                                                </th>
+                                                <th name="th_date" style="max-width:60px;">
+                                                    <span>SOCIETE</span>
+                                                </th>
+                                                <th name="th_nbr" style="max-width:90px;">
+                                                    <span>TYPE OPERATION</span>
+                                                </th>
+                                                <th name="th_nbr" style="max-width:90px;">
+                                                    <span>NATURE OPERATION</span>
+                                                </th>
+                                                <th name="th_nbr" style="max-width:100px;">
+                                                    <span>LIBELE</span>
+                                                </th>
+                                                <th name="th_nbr" style="max-width:85px;">
+                                                    <span>DONNE A</span>
+                                                </th>
+                                                <th name="th_ch_a" style="max-width:85px;">
+                                                    <span>BENEF FINAL</span>
+                                                </th>
+                                                <th name="th_ch_a" style="max-width:70px;">
+                                                    <span>PROJET</span>
+                                                </th>
+                                                <th name="th_ch_a" style="max-width:70px;">
+                                                    <span>MONTANT</span>
+                                                </th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody style="font-size:14px;">
+                                             <t t-foreach="docs" t-as="o">
+                                                <tr>
+                                                    <td style="max-width:68px;"><span t-field="o.sudo().date"/></td>
+                                                    <td style="max-width:65px;"><span t-esc="o.sudo().num_caisse"/></td>
+                                                    <td style="max-width:90px;"><span t-esc="o.sudo().company_id.name"/></td>
+                                                    <td style="max-width:90px;"><span t-esc="o.sudo().check_in_out"/></td>
+                                                    <td style="max-width:90px;"><span t-esc="o.sudo().nature_operation_id.nature_operation"/></td>
+                                                    <td style="max-width:100px;"><span t-esc="o.sudo().libele"/></td>
+                                                    <td style="max-width:85px;"><span t-esc="o.sudo().payment_with_other.name"/></td>
+                                                    <td style="max-width:85px;"><span t-esc="o.sudo().beneficiaire_is_fournisseur.name"/></td>
+                                                    <td style="max-width:70px;"><span t-esc="o.sudo().chantier_id.name"/></td>
+                                                    <td style="max-width:70px;"><span t-esc="o.sudo().somme_char"/></td>
+                                                </tr>
+                                             </t>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <table>
+                                <thead>
+                                    <tr style="font-weight: bold;">
+                                        TOTAL ENTREE: <span t-esc="total_entree"/> <br/>
+                                        TOTAL SORTIE: <span t-esc="total_sortie"/><br/>
+                                        SOLDE       : <span t-esc="solde"/>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                </t>
+        </t>
+    </template>
+</odoo>

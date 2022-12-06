@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="hr_employee_report">
+        <t t-call="web.html_container">
+            <!--<t t-call="web.external_layout">-->
+            <t t-foreach="docs" t-as="o">
+            <t t-call="web.basic_layout">
+
+                <link rel="stylesheet" href="/agentis/static/src/css/agentisOrdreMission.css"/>
+                <div class="page">
+
+                    <div class="Body">
+                        <t t-if="o.company_id.logo">
+                            <div class="col-3 mb4">
+                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+                            </div>
+                        </t>
+                        <div class="float-left" style="border-width:1px;border-style:dotted;border-color:#1B4F72;margin-bottom:5px;margin-bottom:10px;min-width:300px; margin-right:0px;">
+                            <span style="margin-left:10px;margin-top:10px;">
+                                <strong>SOCIETE: <span t-field="o.company_id.name"/></strong>
+                            </span>
+                            <br/>
+                            <span style="margin-left:10px;margin-top:10px;">
+                                <strong>ADRESSE: <span t-field="o.company_id.sudo().street"/></strong>
+                            </span>
+                            <br/>
+                            <span style="margin-left:10px;margin-top:10px;">
+                                <strong>N°CC: <span t-field="o.company_id.sudo().vat"/></strong>
+                            </span>
+                        </div>
+                         <table>
+                        <thead>
+                            <tr>
+                                <th colspan="4" style="text-align:center; text-transform:uppercase; font-weight:bold;letter-spacing:3px;">
+                                    Ordre de mission
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdc1">Bénéficiaire:</td>
+                                <td class="tdc3" colspan="3"><span t-field="o.sudo().nom_prenoms"/></td>
+                            </tr>
+                            <tr>
+                                <td class="tdc1">Objet de la mission:</td>
+                                <td class="tdc3" colspan="3"><span t-field="o.sudo().objet_de_la_mission"/></td>
+                            </tr>
+                             <tr>
+                                <td class="tdc1">Lieu:</td>
+                                <td class="tdc3" colspan="3"><span t-field="o.sudo().lieu"/></td>
+                            </tr>
+                             <tr>
+                                <td class="tdc1">Période:</td>
+                                <td class="tdc3" colspan="3">Du <span t-field="o.sudo().start_date"/> AU <span t-field="o.sudo().end_date"/></td>
+                             </tr>
+                            <tr>
+                                <td class="tdc1">Moyen de transport:</td>
+                                <td class="tdc3" colspan="3"><span t-field="o.sudo().translate"/></td>
+                             </tr>
+                            <tr>
+                                <td class="tdc1">Projet:</td>
+                                <td class="tdc3" colspan="3"><span t-field="o.sudo().chantier_id.name"/></td>
+                             </tr>
+                            <tr>
+                                <td class="tdc1">Société:</td>
+                                <td class="tdc3" colspan="3"><span t-field="o.sudo().company_id.name"/></td>
+                             </tr>
+                             <tr>
+                                <td class="tdc1" colspan="3">prestations autorisées:</td>
+                               <!-- <td colspan="3"></td>-->
+                             </tr>
+                            <tr>
+                                <td class="tdc4">Hébergement<br/><span t-field="o.sudo().house"/></td>
+                                <td class="tdc4">Restauration<br/><span t-field="o.sudo().food"/></td>
+                                <td class="tdc4">téléphone<br/><span t-field="o.sudo().tel"/></td>
+                                <td class="tdc4">Taxi<br/><span t-field="o.sudo().Ta_xi"/></td>
+                             </tr>
+                            <!--<tr>
+                                <td class="tdc4">Avion<br/>none</td>
+                                <td class="tdc4">Extra<br/>Oui/Non</td>
+                                <td class="tdc4">Divers<br/>Oui/Non</td>
+                                <td></td>
+                             </tr>-->
+                           <!-- <tr>
+                                <td class="tdc4">Acompte<br/>Oui/Non</td>
+                                <td class="tdc1">Si oui, Montant:</td>
+                                <td class="tdc4">109987 FCFA</td>
+                                <td></td>
+                             </tr>-->
+                            <tr>
+                                <td class="tdc2" colspan="4">*Les charges supportées dans le cadre du déroulement de cette mission
+                                    seront supportés par la société <span t-field="o.sudo().company_id.name"/>.</td>
+                             </tr>
+                            <tr>
+                                <td class="tdc1" colspan="4">Signature de Direction Générale:</td>
+                             </tr>
+                            <tr>
+
+                             </tr>
+
+
+                        </tbody>
+
+                    </table>
+
+                    </div>
+                    <div class="footer">
+                        <div class="text-center" style="border-top: 1px solid black;">
+                            <ul class="list-inline">
+                                <li ><span t-field="o.sudo().company_id.street"/> <span style="margin-left:5px;" t-field="o.sudo().company_id.zip"/>.
+                                    E-mail: <span t-field="o.sudo().company_id.email"/> Téléphone: <span t-field="o.sudo().company_id.phone"/></li>
+
+                            </ul>
+                        </div>
+                    </div>
+
+
+                </div>
+                </t>
+            </t>
+            </t>
+        <!--</t>-->
+
+    </template>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+
+    <!--list-->
+    <record id="certificat_order_view_form_inherit" model="ir.ui.view">
+            <field name="name">employ.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <header>
+                   <button name="print_certificat" string="CERTIFICAT DE TRAVAIL" type="object" groups="hr.group_hr_manager"/>
+                </header>
+            </field>
+        </record>
+     <!--Fin list-->
+
+
+
+</odoo>

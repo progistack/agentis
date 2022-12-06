@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="agentis_print_dga" model="ir.actions.report">
+        <field name="name">rapport caisse</field>
+        <field name="model">agentis.dga</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.agentis_dga_report</field>
+        <field name="report_file">agentis.agentis_dga_report</field>
+        <field name="print_report_name">'principale - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_agentis_dga"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="agentis_print_office_manager" model="ir.actions.report">
+        <field name="name">rapport caisse</field>
+        <field name="model">office.manager</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.agentis_office_manager_report</field>
+        <field name="report_file">agentis.agentis_office_manager_report</field>
+        <field name="print_report_name">'secondaire - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_office_manager"/>
+        <field name="binding_type">report</field>
+    </record>
+    <!-- .replace('/', '') -->
+
+    <record id="agentis_print_agentis_comptable" model="ir.actions.report">
+        <field name="name">rapport bancaire</field>
+        <field name="model">agentis.comptable</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.agentis_agentis_comptable_report</field>
+        <field name="report_file">agentis.agentis_agentis_comptable_report</field>
+        <field name="print_report_name">'comptable - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_agentis_comptable"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!--compte analytique-->
+    <record id="agentis_print_account_Analytic_Account" model="ir.actions.report">
+        <field name="name">Compte analytique</field>
+        <field name="model">account.analytic.account</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.account_Analytic_Account_report</field>
+        <field name="report_file">agentis.account_Analytic_Account_report</field>
+        <field name="print_report_name">'projet - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_account_analytic_account"/>
+        <field name="binding_type">report</field>
+    </record>
+     <!--end compte analytique-->
+
+    <!--attestation de travail-->
+    <record id="agentis_print_attestation_travail" model="ir.actions.report">
+        <field name="name">ATTESTATION DE TRAVAIL</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.hr_employee_report_attestation</field>
+        <field name="report_file">agentis.hr_employee_report_attestation</field>
+        <field name="print_report_name">'attestation travail - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hr_employee"/>
+        <field name="binding_type">report</field>
+    </record>
+     <!--end attestation de travail-->
+
+     <!--employee module certificat de travail-->
+    <record id="agentis_print_certificat_travail" model="ir.actions.report">
+        <field name="name">Certificat de travail</field>
+        <field name="model">hr.employee</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.hr_employee_report_certificat</field>
+        <field name="report_file">agentis.hr_employee_report_certificat</field>
+        <field name="print_report_name">'certificat travail - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_hr_employee"/>
+        <field name="binding_type">report</field>
+    </record>
+     <!--end certificat de travail-->
+
+     <!--employee module ordre de mission-->
+    <record id="agentis_print_ordre_mission" model="ir.actions.report">
+        <field name="name">Ordre de mission</field>
+        <field name="model">mission.profile</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.hr_employee_report</field>
+        <field name="report_file">agentis.hr_employee_report</field>
+        <field name="print_report_name">'ordre mission - %s' % (object.nom_prenoms)</field>
+        <field name="binding_model_id" ref="model_mission_profile"/>
+        <field name="binding_type">report</field>
+    </record>
+     <!--end ordre de mission-->
+
+    <!-- caisse principale export en pdf -->
+    <record id="agentis_dga_principale_pdf" model="ir.actions.report">
+        <field name="name">Export en pdf</field>
+        <field name="model">agentis.dga</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">agentis.agentis_principale_pdf</field>
+        <field name="report_file">agentis.agentis_principale_pdf</field>
+        <field name="print_report_name">'PDF Caisse principale'</field>
+        <field name="binding_model_id" ref="model_agentis_dga"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="sheet_a5" model="report.paperformat">
+            <field name="name">A4 Format</field>
+            <field name="default" eval="True"/>
+            <field name="format">custom</field>
+            <field name="page_height">220</field>
+            <field name="page_width">160</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">2</field>
+            <field name="margin_bottom">2</field>
+            <field name="margin_left">2</field>
+            <field name="margin_right">2</field>
+            <field name="header_line" eval="False" />
+            <field name="header_spacing">2</field>
+            <field name="dpi">130</field>
+        </record>
+
+    <record id="agentis_dga_principale_pdf" model="ir.actions.report">
+        <field name="paperformat_id" ref="agentis.sheet_a5"/>
+    </record>
+
+
+
+</odoo>

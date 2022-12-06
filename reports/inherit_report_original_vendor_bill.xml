@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="inherit_report_original_vendor_bill" inherit_id="account.report_original_vendor_bill">
+
+        <xpath expr="//t[@t-foreach='docs']" position="replace">
+            <t t-foreach="docs" t-as="o">
+
+            </t>
+        </xpath>
+
+    </template>
+</odoo>

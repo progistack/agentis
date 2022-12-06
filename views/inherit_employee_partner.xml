@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="inherited_view_employee1_form" model="ir.ui.view">
+        <field name="name">inherited_hr1.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='image_1920']" position="after">
+                    <field name="employee_type" invisible="1"/>
+                    <field name="currency_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherited_view_partner_form" model="ir.ui.view">
+        <field name="name">inherited_res.partner.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='phone']" position="after">
+                    <field name="employee_type" invisible="1"/>
+                    <field name="user_associe_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherited_view_res_company_form" model="ir.ui.view">
+        <field name="name">inherited_res.company.form</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='vat']" position="before">
+                <field name="capital"/>
+                <field name="rccm"/>
+            </xpath>
+            <xpath expr="//field[@name='vat']" position="attributes">
+                    <attribute name="string">N°CC</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

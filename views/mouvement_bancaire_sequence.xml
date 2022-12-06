@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="banque_sequence" model="ir.sequence">
+        <field name="name">Mouvement Bancaire</field>
+        <field name="code">ban.sequence</field>
+        <field name="prefix">BQ/</field>
+        <field name="padding">7</field>
+    </record>
+</odoo>

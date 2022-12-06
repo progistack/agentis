@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_agentis_chantier_form" model="ir.ui.view">
+        <field name="name">agentis.chantier.form</field>
+        <field name="model">agentis.chantier</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="nom"/>
+                            <field name="client"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_agentis_chantier_tree" model="ir.ui.view">
+        <field name="name">agentis.chantier.tree</field>
+        <field name="model">agentis.chantier</field>
+        <field name="arch" type="xml">
+            <tree string="Agentis Chantier">
+                <field name="name" width="1.6"/>
+                <field name="description" width="1.6"/>
+                <field name="client" width="1.6"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_agentis_chantier_tree_action" model="ir.actions.act_window">
+        <field name="name">Agentis Chantier</field>
+        <field name="res_model">agentis.chantier</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_agentis_chantier_tree"/>
+    </record>
+
+    <record id="view_bank_form" model="ir.ui.view">
+        <field name="name">agentis.bank.form</field>
+        <field name="model">agentis.bank</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+
+                        </group>
+                        <group>
+                            <field name="code"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_bank_tree" model="ir.ui.view">
+        <field name="name">agentis.bank.tree</field>
+        <field name="model">agentis.bank</field>
+        <field name="arch" type="xml">
+            <tree string="Agentis bank">
+                <field name="name" width="1.6"/>
+                <field name="code" width="1.6"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_bank_tree_action" model="ir.actions.act_window">
+        <field name="name">Bank</field>
+        <field name="res_model">agentis.bank</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_bank_tree"/>
+    </record>
+
+    <menuitem id="agentis.menu_chantier_config" name="Caisses" parent="account.menu_finance_configuration" sequence="0" groups="base.group_system"/>
+    <menuitem id="agentis.menu_account_caisse_chantier" name="Chantiers" parent="agentis.menu_chantier_config" sequence="1"
+               action="view_agentis_chantier_tree_action"/>
+    <menuitem id="agentis.menu_account_bank" name="Banques" parent="agentis.menu_chantier_config" sequence="2"
+               action="view_bank_tree_action"/>
+</odoo>

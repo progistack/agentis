@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_office_manager_tree" model="ir.ui.view">
+        <field name="name">office.manager.tree</field>
+        <field name="model">office.manager</field>
+        <field name="arch" type="xml">
+            <tree string="Listes" js_class="manager_list_dashboard" sample="1" export_xlsx="0">
+                <header>
+                    <button name="%(agentis.view_agentis_dga_export_action)d" type="action"
+                            string="Imprimer les données" context="{'default_type_caisse' : 'manager'}"/>
+                    <button name="validate_mvt" type="object" class="oe_highlight" string="Valider le(s) bon de caisse"/>
+                    <button name="validate_operation" type="object" class="oe_highlight" confirm="si vous clicquez sur ok vous ne pourrez plus modiffier ce mouvement"
+                            string="Comptabiliser"/>
+                    <button name="put_draft" type="object" class="oe_highlight" string="Mettre en brouillon"/>
+                    <!--<button name="change_project_id" type="object" class="oe_highlight" string="update project"/>
+                    <button name="archive_project" type="object" class="oe_highlight" string="archive project"/>-->
+                </header>
+                <field name="name" width="1"/>
+                <field name="num_bon" width="1" optional="hide"/>
+                <field name="libele" width="1" />
+                <field name="num_facture" width="1" string="num fact"/>
+                <field name="nature" width="1" string="nature opération" optional="show"/>
+                <field name="company_id" width="1"/>
+                <field name="journal_id" optional="hide" width="1" string="nat pay"/>
+                <field name="payment_with" width="1" invisible="1"/>
+                <field name="payment_with_other" width="1" optional="hide" string="cl/fourn" attrs="{'invisible':[('payment_with','=','employee')]}"/>
+                <field name="beneficiaire_employee" width="1" optional="hide" widget="many2one_avatar_employee"/>
+                <field name="beneficiaire_is_fournisseur" string="Béneficiaire" optional="hide"/>
+                <field name="check_in_out" width="1" optional="hide"/>
+                <field name="somme" width="1" optional="show"/>
+                <field name="chantier_id" width="1"/>
+                <field name="create_date" width="1"/>
+                <field name="date_prevue" width="1" optional="show"/>
+                <field name="update" width="1" optional="hide"/>
+                <field name="update_by" width="1" optional="hide"/>
+                <field name="prive" width="1" invisible="1" optional="hide"/>
+                <field name="solde" optional="show" sum="Total Entrée/Sortie" widget='monetary' options="{'currency_field': 'currency_id'}" decoration-bf="True"/>
+                <field name="status" widget="badge" string="Statut" decoration-info="status == 'brouillon'"
+                       decoration-success="status == 'valide'" decoration-warning="status == 'attente'" decoration-muted="status == 'annule'"/>
+                <button type="object" icon="fa-trash" name="unlink" confirm="Voulez-vous réellement supprimer cette ligne"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_agentis_office_tree_users" model="ir.ui.view">
+        <field name="name">agentis.office.manager.users.tree</field>
+        <field name="model">office.manager</field>
+        <field name="arch" type="xml">
+            <tree string="Listes">
+                <field name="name" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="libele" width="2" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="num_facture" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="nature_payment" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="payment_with" width="1" invisible="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="beneficiaire_employee" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="check_in_out" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="somme" width="1" invisible="1"/>
+                <field name="chantier_id" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="create_date" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="update" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="update_by" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="prive" width="1" attrs="{'invisible':[('prive','=',True)]}" invisible="1"/>
+                <field name="insible_somme" invisible="1"/>
+                <field name="somme_in" invisible="1"/>
+                <field name="somme_out" optional="hide"/>
+                <field name="is_create" invisible="1"/>
+                <field name="solde" optional="show"
+                       sum="Total Entrée/Sortie" widget='monetary' options="{'currency_field': 'currency_id'}"
+                       decoration-bf="True"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_office_manager_form" model="ir.ui.view">
+        <field name="name">office.manager.form</field>
+        <field name="model">office.manager</field>
+        <field name="arch" type="xml">
+            <form>
+                 <header style="margin-top:25px;">
+                     <field name="status" widget="statusbar"/>
+                    <button name="put_suspense" type="object" string="Mettre en attente" style="margin-right:15px;"
+                            class="oe_highlight" attrs="{'invisible':['|','|',('etat','=',False),('no_see_dga','=',True), ('status','in',('valide','attente','annule','compta'))]}"/>
+                     <button name="validate_mvt" type="object" string="Valider le bon de caisse"
+                             class="oe_highlight" attrs="{'invisible':['|','|',('etat','=',False),('no_see_dga','=',True),('status','in',('valide','annule','compta'))]}"/>
+                     <button name="put_draft" type="object" string="Remettre en brouillon"
+                             class="oe_highlight" attrs="{'invisible':['|','|',('beneficiaire_is','=','dga'),('no_see_dga','=',True),('status','not in',('valide','attente'))]}"/>
+                     <button name="validate_operation" type="object" class="oe_highlight" attrs="{'invisible':['|','|',('etat','=',False),('no_see_dga','=',True),('status','in',('attente','brouillon','annule','compta'))]}"
+                             confirm="si vous clicquez sur ok vous ne pourrez plus modiffier ce mouvement" string="Comptabiliser"/>
+
+                     <!--<button name="%(agentis.view_agentis_dga_export_action)d" type="action" string="imprimer les factures"
+                             attrs="{'invisible':[('status','in',('brouillon','attente'))]}" class="btn-success"
+                             context="{'default_type_caisse' : 'manager'}"/> -->
+
+                 </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button class="oe_stat_button" type="object" attrs="{'invisible':['|',('beneficiaire_is','in',('employee','dga','autre')),('facture','!=',True)]}" name="open_facture" icon="fa-pencil-square-o">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Facture</span>
+                                <span class="o_stat_value">
+                                    <field name="total_facture_with_tax"/>
+                                </span>
+                            </div>
+                        </button>
+                        <button class="oe_stat_button" type="object" attrs="{'invisible':[('beneficiaire_is','in',('employee','dga','autre'))]}" name="open_payment" icon="fa-pencil-square-o">
+                            <div class="o_form_field o_stat_info">
+                                <span class="o_stat_text">Paiement</span>
+                                <span class="o_stat_value">
+                                    <field name="total_with_payment"/>
+                                </span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" text="VALIDE" bg_color="bg-info" attrs="{'invisible': [('status', '!=', 'valide')]}" tooltip="cette transaction est validée"/>
+                    <widget name="web_ribbon" text="EN ATTENTE" bg_color="bg-info" attrs="{'invisible': [('status', '!=', 'attente')]}" tooltip="cette transaction est en attente"/>
+                    <widget name="web_ribbon" text="ANNULE" bg_color="bg-info" attrs="{'invisible': [('status', '!=', 'annule')]}" tooltip="cette transaction est annulée"/>
+                    <group>
+                            <group>
+                                <field name="create_date"/>
+                                <field name="date_prevue" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="libele" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="nature" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="num_bon" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="etat" invisible="1"/>
+                                <field name="no_see_dga" invisible="1"/>
+                                <field name="check_in_out" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                            </group>
+                            <group>
+                                <field name="facture" attrs="{'invisible': ['|','|',('exist_facture','=', True),('hide_boolean','=', True),('beneficiaire_is','=', 'dga')],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="num_facture" attrs="{'invisible': [('facture','!=', True)],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="amount_facture" attrs="{'invisible': [('facture','!=', True)],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="tax_id" attrs="{'invisible': [('facture','!=', True)],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="exist_facture" attrs="{'invisible': ['|','|',('facture','=', True),('hide_boolean','=', True),('beneficiaire_is','=', 'dga')],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="exist_facture_select" attrs="{'invisible': [('exist_facture','!=', True)],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="num_facture" attrs="{'invisible': [('exist_facture','!=', True)],'readonly': ['|',('status', '!=', 'brouillon'),('exist_facture','=', True)]}"/>
+                                <field name="hide_boolean" invisible="1"/>
+                                <field name="somme" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="total_somme" invisible="1"/>
+                                <field name="somme_lettre" invisible="1"/>
+                                <field name="prive" groups="agentis.agentis_office_manager,agentis.agentis_dga"/>
+                            </group>
+                            <group>
+                                <field name="payment_with" invisible="1"/>
+                                <field name="payment_with_other" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="beneficiaire_is" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="beneficiaire_employee" options="{'no_create': True}" require="1" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','employee'),('check_in_out','=','entrer')]}"/>
+                                <field name="beneficiaire_is_fournisseur" options="{'no_create': True}" string="Client Bénéficiaire:" domain="[('is_company', '=', True)]" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','client'),('check_in_out','=','entrer')]}"/>
+                                <field name="beneficiaire_is_fournisseur" options="{'no_create': True}"  domain="[('is_company', '=', True)]" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','fournisseur'),('check_in_out','=','entrer')]}"/>
+                                <field name="beneficiaire_is_fournisseur" options="{'no_create': True}" string="Autre Bénéficiaire:" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','autre'),('check_in_out','=','entrer')]}"/>
+                                <field name="beneficiaire_employee" options="{'no_create': True}" string="Nom employé:" require="1" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','employee'),('check_in_out','=','sortie')]}"/>
+                                <field name="beneficiaire_is_fournisseur" options="{'no_create': True}" string="Nom client:" domain="[('is_company', '=', True)]" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','client'),('check_in_out','=','sortie')]}"/>
+                                <field name="beneficiaire_is_fournisseur" options="{'no_create': True}" string="Nom fournisseur:" domain="[('is_company', '=', True)]" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','fournisseur'),('check_in_out','=','sortie')]}"/>
+                                <field name="beneficiaire_is_fournisseur" options="{'no_create': True}" string="Autre:" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|',('beneficiaire_is','!=','autre'),('check_in_out','=','sortie')]}"/>
+                            </group>
+
+                            <group style="margin-top:15px;">
+                                <!-- <field name="product_id"/> -->
+                                <field name="chantier_id" options="{'no_create': True}" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="journal_id" invisible="1" options="{'no_create': True}" domain="[('type', '=','cash'),('code', '!=','CSH1')]" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible': [('check_in_out','=','entrer')]}"/>
+                                <field name="fideca" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="maroc" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="borderau" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="num_borderau" attrs="{'invisible':[('borderau','=',False)],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="update" invisible="1"/>
+                                <field name="update_by" readonly="1"/>
+                            </group>
+                        <group name="attachment">
+                            <field name="attachment_ids" widget="many2many_binary" attrs="{'readonly': [('status', '!=', 'brouillon')]}"
+                                    options="{'accepted_file_extensions':'.png,.jpeg,.jpg,.pdf,.docx,.xlsx'}"/>
+                        </group>
+                        <group>
+                            <field name="note" attrs="{'readonly': [('status', '!=', 'brouillon')]}" />
+                            <field name="company_create" readonly="1" invisible="1"/>
+                        </group>
+                        </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_office_manager_search" model="ir.ui.view">
+            <field name="name">office.manager.search</field>
+            <field name="model">office.manager</field>
+            <field name="arch" type="xml">
+                <search string="search">
+                    <field name="company_id"/>
+                    <field name="chantier_id"/>
+                    <field name="libele"/>
+                    <field name="num_bon"/>
+                    <field name="name"/>
+                    <separator orientation="vertical"/>
+                    <filter name="status" string="caisse secondaire" domain="[('status', 'in', ('valide','attente','brouillon','compta'))]"/>
+                    <filter string="Date de Création" name="create_date" date="create_date" default_period="this_year"/>
+                    <separator orientation="vertical"/>
+                    <filter string="FIDECA" name="fideca" domain="[('fideca','=',True)]"/>
+                    <group expand="1" string="Group By">
+                        <filter string="Société" name="company_id" context="{'group_by':'company_id'}"/>
+                        <filter string="Chantier" name="chantier_id" context="{'group_by':'chantier_id'}"/>
+                        <filter string="Bénéficiaire" name="beneficiaire_is_fournisseur" context="{'group_by':'beneficiaire_is_fournisseur'}"/>
+                        <filter string="Employé" name="beneficiaire_employee" context="{'group_by':'beneficiaire_employee'}"/>
+                    </group>
+                </search>
+            </field>
+    </record>
+
+    <record id="view_office_manager_tree_action" model="ir.actions.act_window">
+        <field name="name">Caisse Secondaire</field>
+        <field name="res_model">office.manager</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('status', 'in', ('valide','attente','brouillon','compta')),('no_see_dga','!=',True)]</field>
+        <field name="view_id" ref="view_office_manager_tree"/>
+    </record>
+
+    <record id="view_office_manager_users_tree_action" model="ir.actions.act_window">
+        <field name="name">Caisse Secondaire</field>
+        <field name="res_model">office.manager</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[('prive','!=',True)]</field>
+        <field name="view_id" ref="view_agentis_office_tree_users"/>
+    </record>
+
+    <menuitem id="agentis.menu_account_caisse_office_manager_dga1" name="Caisse Secondaire" parent="agentis.menu_account_caisse" sequence="2"
+               action="view_office_manager_tree_action" groups="agentis.agentis_office_manager,agentis.agentis_dga"/>
+    <menuitem id="agentis.menu_account_caisse_office_manager_dga2" name="Caisse Secondaire" parent="agentis.menu_account_caisse" sequence="2"
+               action="view_office_manager_users_tree_action" groups="agentis.agentis_users"/>
+
+</odoo>

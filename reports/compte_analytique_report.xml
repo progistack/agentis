@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="account_Analytic_Account_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+            <t t-call="web.basic_layout">
+
+                <link rel="stylesheet" href="/agentis/static/src/css/agentisAnalytique.css"/>
+                <div class="page">
+                    <div class="col-3 mb4">
+                        <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+                    </div>
+                    <div class="container">
+                        <div  class="whereClient">
+                            <label style="width:200px;">Partenaire: </label> <small style=""><span t-field="o.sudo().name"/></small><br/>
+                            <label style="width:200px;">Domiciliation:</label><small style=""><span t-field="o.sudo().domiciliation"/></small><br/>
+                            <label style="width:200px;">Convention/N°Contrat:</label><small style=""><span t-field="o.sudo().code"/></small><br/>
+                        </div>
+                        <div  class="whereGroup">
+                            <label style="width:200px;">Société:</label><small style=""><span t-field="o.sudo().company_id.name"/></small><br/>
+                            <label style="width:200px;">N° de marché:</label><span t-field="o.sudo().agentis_tags"/><br/>
+                            <label style="width:200px;">Total:</label><span t-field="o.sudo().total"/><br/>
+                        </div>
+                        <div class="tableClass">
+                            <div style="margin-top:50px;">
+                                <table class="table table-bordered" style="border: 2px solid #32a1ce;">
+                                        <thead>
+                                            <tr>
+                                                <th name="th_date" style="max-width:60px;">
+                                                    <span>Date</span>
+                                                </th>
+                                                <th name="th_nom" style="max-width:90px;">
+                                                    <span>Convention/N°contrat</span>
+                                                </th>
+                                                <th name="th_nbr" style="max-width:170px;">
+                                                    <span>N° du lot</span>
+                                                </th>
+                                                <th name="th_ch_a" style="max-width:70px;">
+                                                    <span>Montant</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="o.contrat_id" t-as="con">
+                                                <tr>
+                                                    <td style="max-width:60px;"><span t-field="con.sudo().date"/></td>
+                                                    <td style="max-width:90px;"><span t-esc="con.sudo().name"/></td>
+                                                    <td style="max-width:170px;"><span t-esc="con.sudo().name_lot"/></td>
+                                                    <td style="max-width:70px;"><span t-esc="con.sudo().amount_float"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

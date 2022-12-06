@@ -1,0 +1,16 @@
+.whereClient
+{
+    border-top: 1rem solid #2874A6;
+    border-bottom: thick double #32a1ce;
+    margin: 20px 50px 20px 10px;
+}
+.whereGroup
+{
+   border-bottom: 1rem solid #2874A6;
+   margin: 0 50px 20px 10px;
+}
+
+.whereGroup,.whereClient
+{
+    padding-left: 1px;
+}

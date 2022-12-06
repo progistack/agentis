@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_agentis_dga_export" model="ir.ui.view">
+        <field name="name">agentis.dga.export</field>
+        <field name="model">dga.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="start_date" string="Date de début"/>
+                    </group>
+                    <group>
+                        <field name="end_date" string="Date de fin"/>
+                    </group>
+                    <group>
+                        <field name="fideca" string="FIDECA"/>
+                    </group>
+                    <group>
+                        <field name="company_id"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="export_datas" type="object" string="Télécharger" class="oe_highlight"/>
+                    <button type="object" string="Annuler" special="cancel" data-hotkey="z" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_agentis_principale_export" model="ir.ui.view">
+        <field name="name">agentis.dga.export</field>
+        <field name="model">dga.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="start_date" string="Date de début"/>
+                    </group>
+                    <group>
+                        <field name="end_date" string="Date de fin"/>
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button name="export_datas" type="object" string="Télécharger" class="oe_highlight"/>
+                    <button type="object" string="Annuler" special="cancel" data-hotkey="z" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="view_agentis_principale_export_pdf" model="ir.ui.view">
+        <field name="name">agentis.dga.export</field>
+        <field name="model">dga.report.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="start_date" string="Date de début"/>
+                    </group>
+                    <group>
+                        <field name="end_date" string="Date de fin"/>
+                    </group>
+
+                </sheet>
+                <footer>
+                    <button name="export_data_pdf" type="object" string="Télécharger" class="oe_highlight"/>
+                    <button type="object" string="Annuler" special="cancel" data-hotkey="z" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+     <record id="view_agentis_dga_export_action" model="ir.actions.act_window">
+        <field name="name">Export</field>
+        <field name="res_model">dga.report.wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+         <field name="target">new</field>
+        <field name="view_id" ref="view_agentis_dga_export"/>
+    </record>
+
+    <record id="view_agentis_principale_export_action" model="ir.actions.act_window">
+        <field name="name">Export</field>
+        <field name="res_model">dga.report.wizard</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">form</field>
+         <field name="target">new</field>
+        <field name="view_id" ref="view_agentis_principale_export"/>
+    </record>
+    <record id="view_agentis_principale_export_pdf_action" model="ir.actions.act_window">
+            <field name="name">exporter en pdf</field>
+            <field name="res_model">dga.report.wizard</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+             <field name="target">new</field>
+            <field name="view_id" ref="view_agentis_principale_export_pdf"/>
+        </record>
+
+</odoo>

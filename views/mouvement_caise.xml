@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="inherited_view_employee_form" model="ir.ui.view">
+        <field name="name">inherited_hr.employee.form</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='image_1920']" position="after">
+                <div>
+                    <h2>SOLDE:
+                        <field name="total_sold" string="Solde" widget="monetary" readonly="0" options="{'currency_field': 'currency_id'}"/>
+                    </h2>
+                    <field name="currency_id" invisible="1"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="inherited_view_expense_form" model="ir.ui.view">
+        <field name="name">inherited_hr.expense.form</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="before">
+                <div>
+                    <h2>SOLDE:
+                        <field name="total_sold" string="Solde" widget="monetary" readonly="0" options="{'currency_field': 'currency_id'}"/>
+                    </h2>
+                    <field name="currency_id" invisible="1"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

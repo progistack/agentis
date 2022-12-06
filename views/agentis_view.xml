@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_agentis_tree" model="ir.ui.view">
+        <field name="name">table.tree</field>
+        <field name="model">agentis.table</field>
+        <field name="arch" type="xml">
+            <tree string="Listes">
+                <field name="name" width="1.6"/>
+                <field name="surname" attrs="{'invisible':[('priority','=','1')]}" width="1.6"/>
+                <field name="priority"  width="1.6" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_agentis_form" model="ir.ui.view">
+        <field name="name">table.form</field>
+        <field name="model">agentis.table</field>
+        <field name="arch" type="xml">
+            <form string="Listes">
+                <group>
+                    <field name="name" string="nom"/>
+                    <field name="surname" string="Prenom"/>
+                    <field name="priority" string="visible pas tous ?" widget="radio"/>
+                </group>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_agentis_form_tree" model="ir.actions.act_window">
+         <field name="name">Agentis</field>
+         <field name="type">ir.actions.act_window</field>
+         <field name="res_model">agentis.table</field>
+         <field name="view_mode">form,tree</field>
+         <field name="view_id" ref="view_agentis_tree"/>
+     </record>
+
+    <menuitem action="action_agentis_form_tree" id="menu_action_agentis_tree_form" name="Agentis"
+              sequence="30"/>
+</odoo>

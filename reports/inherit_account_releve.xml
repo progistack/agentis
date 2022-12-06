@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <template id ="inherit_account_releve" inherit_id="account.report_statement">
+        <xpath expr="//t[@t-foreach='docs']" position="replace">
+            <t t-foreach="docs" t-as="o">
+                    <t t-call="web.internal_layout">
+                        <div class="page">
+                            <div class="border border-top-0 border-right-0 border-left-0 border-info">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h4 class="text-right w-100">
+                                            <strong>
+                                                <span t-if="o.journal_id.type == 'bank'">Relevé bancaire</span>
+                                                <span t-else="">Relevé de caisse</span>
+                                            </strong>
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-2 pb-2">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5>
+                                            <strong>
+                                                <span t-field="o.journal_id"/>
+                                                <t t-if="o.journal_id.bank_account_id"> -
+                                                    <span t-field="o.journal_id.bank_account_id"/>
+                                                </t>
+                                                <t t-if="o.journal_id.code"> -
+                                                    <span t-field="o.journal_id.code"/>
+                                                </t>
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <h5>
+                                            <strong>
+                                                <t t-if="o.name">
+                                                    <span t-field="o.name"/>
+                                                - </t>
+                                                <span t-field="o.date"/>
+                                            </strong>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table table-lg m-0 table-borderless border border-right-0 border-left-0 border-info">
+                                <tbody>
+                                    <tr>
+                                        <td class="pt-2 pb-2 pl-0 pr-0">
+                                            <table class="table table-borderless m-0">
+                                                <tr>
+                                                    <td class="p-0 w-25">
+                                                        <strong>Solde de départ</strong>
+                                                    </td>
+                                                    <td class="p-0">
+                                                        <strong>
+                                                            <span t-esc="o.line_ids and o.line_ids.sorted(lambda line: line.date)[0].date" t-options='{"widget": "date"}'/>
+                                                        </strong>
+                                                    </td>
+                                                    <td class="text-right p-0">
+                                                        <strong>
+                                                            <span t-field="o.balance_start"/>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="p-0 w-25">
+                                                        <strong>Solde de clôture</strong>
+                                                    </td>
+                                                    <td class="p-0">
+                                                        <strong>
+                                                            <span t-esc="o.line_ids and o.line_ids.sorted(lambda line: line.date)[-1].date" t-options='{"widget": "date"}'/>
+                                                        </strong>
+                                                    </td>
+                                                    <td class="text-right p-0">
+                                                        <strong>
+                                                            <span t-field="o.balance_end_real"/>
+                                                        </strong>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="margin-top:50px;">
+                                <table class="table table-bordered" style="border: 2px solid #32a1ce;">
+                                        <thead>
+                                            <tr>
+                                                <th name="th_date">
+                                                    <span>Date</span>
+                                                </th>
+                                                <th name="th_nom" style="max-width:200px;">
+                                                    <span>Libellé</span>
+                                                </th>
+                                                <th name="th_nbr">
+                                                    <span>N° Transaction</span>
+                                                </th>
+                                                <th name="th_ch_a">
+                                                    <span>Partenaire</span>
+                                                </th>
+                                                <th name="th_ch_a">
+                                                    <span>Montant</span>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="o.line_ids" t-as="line">
+                                                <tr>
+                                                    <td><span t-field="line.sudo().date"/></td>
+                                                    <td style="max-width:200px;"><span t-esc="line.sudo().payment_ref"/></td>
+                                                    <td><span t-esc="line.sudo().num_transaction"/></td>
+                                                    <td><span t-esc="line.sudo().partner_id.name"/></td>
+                                                    <td><span t-esc="line.sudo().amount"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+        </xpath>
+
+    </template>
+</odoo>

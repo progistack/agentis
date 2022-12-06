@@ -1,0 +1,58 @@
+.Body
+{
+     border: 1px dotted #1B4F72;
+     padding:10px;
+     width:1020px;
+     margin-left:90px;
+     padding-bottom:50px;
+     margin-bottom:10px;
+}
+
+table
+{
+    padding:5px 0px;
+    border-collapse: separate;
+    border-spacing: 6px 1.5rem;
+}
+table
+{
+    width:1000px;
+}
+.tdc1
+{
+   font-family: serif;
+   font-weight:bold;
+   font-size:16px;
+   letter-spacing: 2px;
+}
+.tdc2
+{
+    font-family: Georgia, serif;
+    font-style: italic;
+}
+.tdc3
+{
+    font-family: system-ui;
+}
+.tdc4
+{
+    /*font-family: "Gill Sans", sans-serif;*/
+    /*font-family: cursive;*/
+    font-family: system-ui;
+    border: 2px solid #154360;
+    width:100px;
+    text-align:center;
+    /*border-radius: 10px;*/
+    border-radius: 25% 10%;
+    border-style: double;
+    font-family: "Gill Sans", sans-serif;
+
+}
+
+table thead th
+ {
+    background-color: #1A5276;
+    color: #17202A;
+    border-radius: 10px;
+   opacity: 0.9;
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <!--list-->
+    <record id="ordre_order_view_form_inherit" model="ir.ui.view">
+            <field name="name">employ.form.view</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <header>
+                   <button name="%(agentis.mission_profile_action)d" string="ORDRE DE MISSION" context="{'default_nom_prenoms':name}" type="action" groups="hr.group_hr_manager"/>
+                </header>
+            </field>
+        </record>
+     <!--Fin list-->
+</odoo>

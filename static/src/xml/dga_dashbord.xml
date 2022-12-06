@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates>
+
+    <t t-name="agentis.dgaDashboard">
+        <div class="o_dga_dashboard container">
+        <div class="row">
+            <div class="col-sm-5">
+            <table class="table table-bordered">
+                <!-- thead needed to avoid list view rendering error for some reason -->
+                <thead>
+                    <tr>
+                        <td class="o_text text-dark" title="Solde disponible">
+                            <div>Solde disponible</div>
+                        </td>
+                        <td class="o_text text-dark" title="Solde prévisionnel">
+                            <div>Solde prévisionnel</div>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="o_text text-dark">
+                            <t t-esc="values['all_total_validate_dga']"/>
+                        </td>
+                        <td class="o_main o_dga_dashboard_action text-dark">
+                            <t t-esc="values['all_total_draft_dga']"/>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    </t>
+</templates>

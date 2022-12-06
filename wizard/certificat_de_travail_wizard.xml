@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+      <record id="certificat_list_view" model="ir.ui.view">
+        <field name="name">certificat.list.view</field>
+         <field name="model">certificat.profile</field>
+         <field name="arch" type="xml">
+             <tree>
+                  <field  name="nom_prenoms"/>
+                  <field name="societe"/>
+                  <field name="capital"/>
+                  <field name="adresse_postal"/>
+             </tree>
+         </field>
+    </record>
+
+        <record id="certificat_form_view" model="ir.ui.view">
+            <field name="name">certificat de travail</field>
+            <field name="model">certificat.profile</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                             <group>
+                                 <group>
+                                      <field  name="nom_prenoms"/>
+                                      <field name="societe"/>
+                                      <field name="capital"/>
+                                      <field name="adresse_postal"/>
+                                 </group>
+                             </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="certificat_profile_action" model="ir.actions.act_window">
+            <field name="name">CERTIFICAT DE TRAVAIL</field>
+            <field name="res_model">certificat.profile</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+</odoo>

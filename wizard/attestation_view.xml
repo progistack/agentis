@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="attestation_list_view" model="ir.ui.view">
+        <field name="name">attestation.list.view</field>
+         <field name="model">attestation.profile</field>
+         <field name="arch" type="xml">
+             <tree>
+                 <field  name="nom_prenoms_de_employe"/>
+                  <field name="poste_occupe"/>
+                  <field name="nom_societe"/>
+             </tree>
+         </field>
+        </record>
+
+        <record id="attestation_form_view" model="ir.ui.view">
+            <field name="name">attestation</field>
+            <field name="model">attestation.profile</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                             <group>
+                                 <group>
+                                     <field name="nom_prenoms_de_employe"/>
+                                     <field name="poste_occupe"/>
+                                     <field name="nom_societe"/>
+                                 </group>
+                             </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="attestation_profile_action" model="ir.actions.act_window">
+            <field name="name">attestation</field>
+            <field name="res_model">attestation.profile</field>
+            <field name="view_mode">form</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="hr_employee_report_attestation">
+         <t t-call="web.html_container">
+          <!--<t t-call="web.external_layout">-->
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.basic_layout">
+                <link rel="stylesheet" href="/agentis/static/src/css/agentisCertificat.css"/>
+                <div class="page">
+
+                <div class="BodyCertificat">
+                    <t t-if="o.company_id.logo">
+                            <div class="col-3 mb4">
+                                <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 45px;" alt="Logo"/>
+                            </div>
+                        </t>
+                        <div class="float-left" style="border-width:1px;border-style:dotted;border-color:#1B4F72;margin-bottom:5px;margin-bottom:10px;min-width:300px; margin-right:0px;">
+                            <span style="margin-left:10px;margin-top:10px;">
+                                <strong>SOCIETE: <span t-field="o.company_id.name"/></strong>
+                            </span>
+                            <br/>
+                            <span style="margin-left:10px;margin-top:10px;">
+                                <strong>ADRESSE: <span t-field="o.company_id.sudo().street"/></strong>
+                            </span>
+                            <br/>
+                            <span style="margin-left:10px;margin-top:10px;">
+                                <strong>N° CC: <span t-field="o.company_id.sudo().vat"/></strong>
+                            </span>
+                        </div>
+                    <table>
+                        <thead>
+                             <tr>
+                                <td style="padding-bottom:95px;" class="tdDate" colspan="2">Abidjan, le  <span t-esc="datetime.datetime.now().strftime('%d %B %Y')"/></td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">attestation de travail</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="tdText" colspan="2" style="padding-top:50px;">
+                                    <p>
+                                         Nous soussignés <span t-field="o.sudo().company_id.name"/>, Societe au capital de <span t-field="o.sudo().company_id.capital"/> FCFA, sise a <span style="margin-left:5px;" t-field="o.sudo().company_id.city"/>,
+                                        <span t-field="o.sudo().company_id.street"/> <span style="margin-left:5px;" t-field="o.sudo().company_id.zip"/>, et immatriculee au Registre de commerce et de Credit Mobilier d'Abidjan sous
+                                         le Numero <span t-field="o.sudo().company_id.rccm"/> atteste par la presente que M(me) <span t-field="o.sudo().name"/>,
+                                        est employe dans ladite Societe en  <span t-field="o.sudo().contract_id.name"/> depuis le <span t-field="o.sudo().first_contract_date"/>
+                                        en qualité de  <span t-field="o.sudo().job_id.name"/>.
+                                   </p>
+
+                                </td>
+                            </tr>
+                             <tr>
+                                <td class="tdText" colspan="2">
+                                    <p>En foi de quoi, nous lui delivrons la presente attestation pour servir et valoir
+                                        ce que de droit partout où besoin sera.</p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="text-align:end;padding-top:70px;padding-bottom:100px;">
+                                    Fait a Abidjan le <span t-esc="datetime.datetime.now().strftime('%d-%B-%Y')"/>
+                                </td>
+                            </tr>
+                             <tr>
+                                 <tr ><td  style="background-color:#7FB3D5;" colspan="2"></td></tr>
+                                <td colspan="2" style="background-color:#21618C; text-align:center; color:white;">
+                                    <small><span t-field="o.sudo().company_id.street"/>, <span style="margin-left:5px;" t-field="o.sudo().company_id.zip"/> -TEL: <span t-field="o.sudo().company_id.phone"/><br/>
+                                    E-mail: <span t-field="o.sudo().company_id.email"/></small>
+                                </td>
+                            </tr>
+                        </tbody>
+                  </table>
+
+                </div>
+
+                </div>
+            </t>
+        </t>
+
+         </t>
+         <!--</t>-->
+    </template>
+</odoo>

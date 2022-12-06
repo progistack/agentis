@@ -1,0 +1,38 @@
+.styled-table {
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.15);
+}
+.table
+{
+ font-family: sans-serif;
+ min-width: 1000px;
+ margin-bottom:80px;
+ border-radius: 10px;
+}
+
+.table .td, table .th
+{
+    font-family: sans-serif;
+    text-transform:uppercase;
+    letter-spacing:2px;
+    padding:8px 0px;
+}
+.table .tdd
+{
+      color:#2980B9;
+      text-transform:lowercase;
+      letter-spacing:1px;
+}
+.table .tds
+{
+    text-decoration: underline dotted;
+    font-weight: bold;
+}
+
+
+
+
