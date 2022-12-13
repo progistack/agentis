@@ -163,7 +163,7 @@
                                 <field name="borderau" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
                                 <field name="num_borderau" attrs="{'invisible':[('borderau','=',False)],'readonly': [('status', '!=', 'brouillon')]}"/>
                                 <field name="update" invisible="1"/>
-                                <field name="update_by" readonly="1"/>
+                                <field name="write_uid" string="Mise à jour par:" readonly="1"/>
                             </group>
                         <group name="attachment">
                             <field name="attachment_ids" widget="many2many_binary" attrs="{'readonly': [('status', '!=', 'brouillon')]}"

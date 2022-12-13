@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-
+<!--        caiprincipale DGA list view-->
     <record id="view_agentis_dga_tree" model="ir.ui.view">
         <field name="name">agentis.dga.tree</field>
         <field name="model">agentis.dga</field>
@@ -17,9 +17,8 @@
                 <field name="bank_id" width="1" string="Nom banque" optional="hide"/>
                 <field name="company_id" width="1" string="Entreprise" optional="show"/>
                 <field name="payment_with" width="1" invisible="1"/>
-                <field name="payment_with_other" width="1" optional="hide" attrs="{'invisible':[('payment_with','=','employee')]}"/>
-                <field name="beneficiaire_employee" string="Employé" width="1" widget="many2one_avatar_employee" optional="hide"/>
-                <field name="beneficiaire_is_fournisseur" optional="show"/>
+                <field name="private_beneficial_employee" string="Employé" width="1" widget="many2one_avatar_employee" optional="hide"/>
+                <field name="private_beneficial" optional="show"/>
                 <field name="donne_a_client" optional="hide"/>
                 <field name="check_in_out" width="1" optional="hide" decoration-success="somme > 0"/>
                 <field name="nature_operation_id" width="1" optional="show"/>
@@ -35,6 +34,7 @@
         </field>
     </record>
 
+<!--        caisse principale DGA user list view-->
     <record id="view_agentis_dga_tree_users" model="ir.ui.view">
         <field name="name">agentis.dga.users.tree</field>
         <field name="model">agentis.dga</field>
@@ -42,8 +42,8 @@
             <tree string="Listes" create="true" edit="false" export_xlsx="0" js_class="dga_list_dashboard">
                 <header>
                     <button name="export_data_pdf" type="object" string="Exporter en pdf" class="oe_highlight"/>
-                    <!--<button name="get_nature_operation" type="object" string="TEST NATURE" class="oe_highlight"/>
-                    <button name="new_nature" type="object" string="TEST NATURE" class="oe_highlight"/>-->
+<!--                    &lt;!&ndash;<button name="get_nature_operation" type="object" string="TEST NATURE" class="oe_highlight"/>-->
+                    <button name="update_private_beneficial" type="object" string="mise donner privee" class="oe_highlight"/>
                 </header>
                 <field name="num_caisse"/>
                 <field name="libele" width="2" attrs="{'invisible':[('prive','=',True)]}"/>
@@ -61,7 +61,7 @@
                 <field name="create_date" width="1" attrs="{'invisible':[('prive','=',True)]}"/>
                 <field name="update" width="1" optional="hide" attrs="{'invisible':[('prive','=',True)]}"/>
                 <field name="update_by" width="1" optional="hide" attrs="{'invisible':[('prive','=',True)]}"/>
-                <field name="prive" width="1" optional="hide" attrs="{'invisible':[('prive','=',True)]}"/>
+                <field name="prive" invisible="1" attrs="{'invisible':[('prive','=',True)]}"/>
                 <field name="status" widget="badge" string="Statut" decoration-info="status == 'brouillon'" decoration-success="status == 'valide'" decoration-warning="status == 'attente'"/>
                 <field name="solde" optional="show"
                        sum="Total Entrée/Sortie" widget='monetary' options="{'currency_field': 'currency_id'}"
@@ -82,6 +82,7 @@
         </field>
     </record>
 
+<!--    caisse principale form view-->
     <record id="view_agentis_dga_form" model="ir.ui.view">
         <field name="name">agentis.dga.form</field>
         <field name="model">agentis.dga</field>
@@ -118,20 +119,24 @@
                                 <field name="donne_a_client" attrs="{'invisible':['|',('check_in_out','=','entrer'),('check_in_out','=','transfert')],'readonly': [('status', '!=', 'brouillon')]}"/>
                                 <field name="origin_fond" attrs="{'invisible':['|',('check_in_out','=','sortie'),('check_in_out','=','transfert')],'readonly': [('status', '!=', 'brouillon')]}"/>
                                 <field name="payment_with" invisible="1"/>
+                                <field name="bank_id"
+                                       string="Nom de la banque" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible': ['|',('check_in_out','in',('sortie','transfert')),('origin_fond','=','espece')]}"/>
                                 <field name="beneficiaire_is_fournisseur" string="Donneur" domain="[('is_company', '=', True)]" attrs="{'invisible':['|',('origin_fond','!=','espece'),('check_in_out','=','transfert')],'readonly': [('status', '!=', 'brouillon')]}"/>
-                                <field name="payment_with_other" attrs="{'readonly': [('status', '=', 'valide')],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="payment_with_other" attrs="{'invisible':[('check_in_out','!=','entrer')],'readonly': [('status', '!=', 'brouillon')]}"/>
                                 <!--<field name="payment_with_fourn" domain="[('is_company', '=', True)]" attrs="{'invisible':['|','|',('payment_with','=','employee'), ('payment_with','=','client'),('payment_with','=','autre')]}"/>
                                 <field name="payment_with_client" domain="[('is_company', '=', True)]"
                                        attrs="{'invisible':['|','|',('payment_with','=','employee'), ('payment_with','=','fournisseur'),('payment_with','=','autre')]}"/>
                                 <field name="payment_with_other"
                                 attrs="{'invisible':['|','|',('payment_with','=','employee'), ('payment_with','=','client'),('payment_with','=','fournisseur')]}"/>
                                 --><!-- modifier-->
-                                <field name="partner_om" context="{'default_beneficiaire_is' : 'dga'}" attrs="{'invisible':[('check_in_out','!=','transfert')]}" readonly="1"/>
+                                <field name="partner_om" string="Beneficiaire" context="{'default_beneficiaire_is' : 'dga'}" attrs="{'invisible':[('check_in_out','!=','transfert')]}" readonly="1"/>
                                 <field name="beneficiaire_is" filter_domain="[('beneficiaire_is', '!=', 'client')]" attrs="{'invisible':[('check_in_out','in',('transfert','entrer'))],'readonly': [('status', '!=', 'brouillon')]}"/>
-                                <field name="beneficiaire_employee" string='Beneficiaire final:' domain="[('employee_type', '=', 'employee')]" require="1" attrs="{'invisible':['|',('beneficiaire_is','!=','employee'),('check_in_out','=','entrer')],'readonly': [('status', '!=', 'brouillon')]}"/>
-                                <field name="beneficiaire_is_fournisseur" domain="[('is_company', '=', True)]" attrs="{'invisible':['|',('beneficiaire_is','!=','client'),('check_in_out','in',('transfert','entrer'))],'readonly': [('status', '!=', 'brouillon')]}"/>
-                                <field name="beneficiaire_is_fournisseur" domain="[('is_company', '=', True)]" attrs="{'invisible':['|',('beneficiaire_is','!=','fournisseur'),('check_in_out','in',('transfert','entrer'))],'readonly': [('status', '!=', 'brouillon')]}"/>
-                                <field name="beneficiaire_is_fournisseur" attrs="{'invisible':[('beneficiaire_is','!=','autre')],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="beneficiaire_employee" string='Beneficiaire final:' domain="[('employee_type', '=', 'employee')]" require="1" attrs="{'invisible':['|','|',('prive', '=', True),('beneficiaire_is','!=','employee'),('check_in_out','=','entrer')],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="beneficiaire_is_fournisseur" domain="[('is_company', '=', True)]" attrs="{'invisible':['|','|',('prive', '=', True),('beneficiaire_is','!=','client'),('check_in_out','in',('transfert','entrer'))],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="beneficiaire_is_fournisseur" domain="[('is_company', '=', True)]" attrs="{'invisible':['|','|',('prive', '=', True),('beneficiaire_is','!=','fournisseur'),('check_in_out','in',('transfert','entrer'))],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="beneficiaire_is_fournisseur" attrs="{'invisible':['|',('prive', '=', True),('beneficiaire_is','!=','autre')],'readonly': [('status', '!=', 'brouillon')]}"/>
+                                <field name="private_beneficial" groups="agentis.agentis_dga" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|','|',('prive', '=', False),('beneficiaire_is','not in',('fournisseur','client','autre')),('check_in_out','in',('transfert','entrer'))]}"/>
+                                <field name="private_beneficial_employee" string="Beneficiaire final" domain="[('employee_type', '=', 'employee')]" groups="agentis.agentis_dga" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':['|','|',('prive', '=', False),('beneficiaire_is','!=','employee'),('check_in_out','=','entrer')]}"/>
                             </group>
                             <group style="margin-top:15px;">
                                 <field name="num_caisse" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible':[('etat','!=',True)]}"/>
@@ -145,13 +150,11 @@
                                 <!-- <field name="product_id"/> -->
                                 <field name="journal_id" invisible="1"
                                        string="Nom de la banque" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible': ['|',('check_in_out','in',('sortie','transfert')),('origin_fond','=','espece')]}"/>
-                                <field name="bank_id"
-                                       string="Nom de la banque" attrs="{'readonly': [('status', '!=', 'brouillon')],'invisible': ['|',('check_in_out','in',('sortie','transfert')),('origin_fond','=','espece')]}"/>
                                 <field name="chantier_id" attrs="{'readonly': [('status', '!=', 'brouillon')], }" groups="agentis.agentis_dga"/>
                                 <field name="analytic_user_id" string="Projet: " attrs="{'readonly': [('status', '!=', 'brouillon')], }" options="{'no_create': True}" groups="agentis.agentis_dga_users"/>
                                 <field name="company_id" groups="base.group_multi_company" options="{'no_create': True}" attrs="{'readonly': [('status', '!=', 'brouillon')]}"/>
                                 <field name="update" invisible="1"/>
-                                <field name="update_by" readonly="1" attrs="{'invisible':[('no_see_dga', '=', True)]}"/>
+                                <field name="write_uid" string="Mise à jour par:" readonly="1" attrs="{'invisible':[('no_see_dga', '=', True)]}"/>
                             </group>
                         <group name="attachment" attrs="{'invisible': [('prive', '=', True),('user', '=', True)]}">
                             <field name="attachment_ids" widget="many2many_binary" attrs="{'readonly': [('status', '!=', 'brouillon')]}"
@@ -170,6 +173,7 @@
         </field>
     </record>
 
+    <!--  caisse principale kanban  -->
     <record id="agentis_dga_view_kanban" model="ir.ui.view">
             <field name="name">agentis.dga.kanban</field>
             <field name="model">agentis.dga</field>
@@ -215,6 +219,7 @@
             </field>
         </record>
 
+    <!--caisse principale DGA search view -->
     <record id="view_agentis_dga_search" model="ir.ui.view">
             <field name="name">agentis.dga.search</field>
             <field name="model">agentis.dga</field>
@@ -229,12 +234,13 @@
                         <filter string="Société" name="company_id" context="{'group_by':'company_id'}"/>
                         <filter string="Nature de l'opération" name="nature_operation_id" context="{'group_by':'nature_operation_id'}"/>
                         <filter string="Chantier" name="chantier_id" context="{'group_by':'chantier_id'}"/>
-                        <filter string="Bénéficiaire" name="beneficiaire_is_fournisseur" context="{'group_by':'beneficiaire_is_fournisseur'}"/>
-                        <filter string="Employé" name="beneficiaire_employee" context="{'group_by':'beneficiaire_employee'}"/>
+                        <filter string="Bénéficiaire" name="private_beneficial" context="{'group_by':'private_beneficial'}"/>
+                        <filter string="Employé" name="private_beneficial_employee" context="{'group_by':'private_beneficial_employee'}"/>
                     </group>
                 </search>
             </field>
     </record>
+    <!--caisse principale users search view -->
     <record id="view_agentis_dga_user_search" model="ir.ui.view">
         <field name="name">agentis.dga.search</field>
         <field name="model">agentis.dga</field>
@@ -259,6 +265,7 @@
         </field>
     </record>
 
+    <!--dga action -->
     <record id="view_agentis_dga_tree_action" model="ir.actions.act_window">
         <field name="name">Caisse Principale</field>
         <field name="res_model">agentis.dga</field>
@@ -270,6 +277,7 @@
         <field name="search_view_id" ref="view_agentis_dga_search"/>
     </record>
 
+  <!--dga users action -->
     <record id="view_agentis_dga_tree_action_users" model="ir.actions.act_window">
         <field name="name">Caisse Principale</field>
         <field name="res_model">agentis.dga</field>
@@ -289,18 +297,6 @@
          <field name="target">inline</field> -->
         <field name="view_id" ref="view_agentis_dga_tree_nature"/>
     </record>
-    <!--
-    <record id="oodo_hr_attendance_view_form" model="ir.ui.view">
-            <field name="name">agentis.pga.inherit</field>
-            <field name="model">agentis.dga</field >
-            <field name="inherit_id" ref="agentis.view_agentis_dga_tree" />
-            <field name="groups_id" eval="[(6, 0, [ref('agentis.') ])]" />
-            <field name="arch" type="xml">
-                <field name="name" position="attributes">
-                   <attribute name="readonly">0</attribute>
-                </field>
-            </field>
-    </record> -->
 
     <menuitem id="agentis.menu_account_caisse" name="Caisses" parent="account.menu_finance_entries" sequence="-1"
               groups="agentis.agentis_dga,agentis.agentis_office_manager,agentis.agentis_users,agentis.agentis_office_manager_prive,agentis.agentis_dga_users,agentis.agentis_dga_prive"/>

@@ -13,7 +13,6 @@
     'data': [
         'security/agentis_security.xml',
         'security/ir.model.access.csv',
-        # 'views/mouvement_caise.xml',
         'wizard/export_view.xml',
         'wizard/ordre_mission_wizard.xml',
         'views/inherit_employee_partner.xml',
@@ -25,7 +24,6 @@
         'views/office_manger_prive.xml',
         'views/agentis_dga_prive_view.xml',
         'views/inherit_account_view_move_form.xml',
-        # 'views/charge_transfert_view.xml',
         'views/inherit_account_tax.xml',
         'views/dga_sequence.xml',
         'views/inherit_res_partner.xml',

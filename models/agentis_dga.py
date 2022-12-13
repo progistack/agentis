@@ -38,19 +38,19 @@ class AgentisDGA(models.Model):
     beneficiaire_is = fields.Selection(
         [('employee', 'Employé'), ('client', 'Client'), ('fournisseur', 'Fournisseur'), ('autre', 'Autre'),
          ('dga', 'Office manager')], "Partenaire:", default='fournisseur', track_visibility='onchange')
-    beneficiaire_employee = fields.Many2one('hr.employee', string='Employé beneficiaire', track_visibility='onchange')
+    beneficiaire_employee = fields.Many2one('hr.employee', string='Employé beneficiaire:', track_visibility='onchange')
     beneficiaire_is_fournisseur = fields.Many2one('res.partner', string='Beneficiaire final:',
                                                   track_visibility='onchange')
     check_in_out = fields.Selection([('entrer', 'Entrée'), ('sortie', 'Sortie'), ('transfert', 'Transfert de fond')],
                                     "type d'operation:", default='sortie', track_visibility='onchange',
                                     require=True)
     somme = fields.Float(string='Montant:', track_visibility='onchange')
-    update = fields.Datetime(string='Mise à jour le', track_visibility='onchange')
+    update = fields.Datetime(string='Mise à jour le:', track_visibility='onchange')
     update_by = fields.Many2one('res.users', string='Mise à jour par:', track_visibility='onchange')
-    chantier_id = fields.Many2one('account.analytic.account', string="Projet",
+    chantier_id = fields.Many2one('account.analytic.account', string="Projet:",
                                   track_visibility='onchange')  # 'agentis_pga_id'
     etat = fields.Boolean(string='etat')
-    currency_id = fields.Many2one('res.currency', string='Currency', required=True, readonly=False, store=True,
+    currency_id = fields.Many2one('res.currency', string='Devise:', required=True, readonly=False, store=True,
                                   default=lambda self: self.env.company.currency_id)
     solde = fields.Monetary(string='Solde', compute='get_solde', store=True, currency_field='currency_id')
     donne_a_client = fields.Many2one('res.partner', string='Donné à :', track_visibility='onchange')
@@ -59,11 +59,11 @@ class AgentisDGA(models.Model):
     company_id = fields.Many2one('res.company', string='Société:', track_visibility='onchange', required=True)
     journal_id = fields.Many2one('account.journal', string='Journal comptable:', check_company=True)
     tax_id = fields.Many2one('account.tax', string='Taxe:')
-    facture_id = fields.Integer(string='id facture')
-    payment_id = fields.Integer(string='id payment')
+    facture_id = fields.Integer(string='id facture:')
+    payment_id = fields.Integer(string='id payment:')
     type_caisse = fields.Selection(
         [('dga', 'Caisse Principale'), ('manager', 'Caisse secondaire'), ('comptable', 'Mouvement bancaire')],
-        'Type de caisse', track_visibility='onchange')
+        'Type de caisse:', track_visibility='onchange')
     total_somme = fields.Float(string='somme total', compute='get_total_somme')
     somme_lettre = fields.Char(string='Somme lettre', compute='get_somme_lettre', store=True)
     attachment_ids = fields.Many2many(
@@ -72,23 +72,25 @@ class AgentisDGA(models.Model):
         string='Charger vos fichiers:')
     list_check_in_out = []
     origin_fond = fields.Selection([('banque', 'Banque'), ('espece', 'Espece')], 'Origine des fonds', default='banque')
-    num_caisse = fields.Char(string='numero Caisse', track_visibility='onchange')
-    prive = fields.Boolean(string='Privé')
-    fideca = fields.Boolean(string='FIDECA')
+    num_caisse = fields.Char(string='numero Caisse:', track_visibility='onchange')
+    prive = fields.Boolean(string='Privé:')
+    fideca = fields.Boolean(string='FIDECA:')
     user = fields.Boolean(string='user', compute='get_user')
-    partner_om = fields.Selection([('dga', 'Caisse secondaire')], "beneficiaire:", default='dga')
+    partner_om = fields.Selection([('dga', 'Caisse secondaire')], 'caisse secondaire', default='dga')
     somme_char = fields.Char(string='somme en caractere', compute='get_somme_char')
     bank_id = fields.Many2one('agentis.bank', string='Méthode de paiément:', track_visibility='onchange')
-    nature_operation = fields.Char(string='Nature opération', track_visibility='onchange')
+    nature_operation = fields.Char(string='Nature opération:', track_visibility='onchange')
     caisse_id = fields.Char(string='Identifiant Caisse')
     somme_in = fields.Float(string=' Somme', compute='get_somme_in', store=True)
     somme_out = fields.Float(string='Somme', compute='get_somme_out', store=True)
     is_create = fields.Boolean(string='est crée')
     no_see_dga = fields.Boolean(string='A caché', help='permert de cahé les ligne privé consolidé')
-    nature_operation_id = fields.Many2one('nature.operation', string='Nature Operation', track_visibility='onchange')
-    note = fields.Text(string='Note', compute='_compute_note', default=' aucune', store=True)
+    nature_operation_id = fields.Many2one('nature.operation', string='Nature Operation:', track_visibility='onchange')
+    note = fields.Text(string='Note:', compute='_compute_note', default=' aucune', store=True)
     analytic_user_id = fields.Many2one('account.analytic.account', string="Restriction Projet")
     user_instance = fields.Boolean()
+    private_beneficial = fields.Many2one('res.partner', string='Beneficiaire final:')
+    private_beneficial_employee = fields.Many2one('hr.employee', string='Beneficiaire employé:')
 
     @api.depends('activity_user_id', 'somme')
     def _compute_note(self):
@@ -101,10 +103,6 @@ class AgentisDGA(models.Model):
                 if ln.note.striptags():
                     line.note = ln.note.striptags()
 
-    def export_data_pdf(self):
-        data = {'ids': self.ids}
-        return self.env.ref('agentis.agentis_dga_principale_pdf').report_action([], data=data)
-
     @api.depends('prive')
     def get_user(self):
         res_user = self.env['res.users'].search([('id', '=', self._uid)])
@@ -112,26 +110,6 @@ class AgentisDGA(models.Model):
             self.user = True
         else:
             self.user = False
-
-    @api.onchange('user_instance')
-    def onchange_user_instance(self):
-        connect_user = self.env['res.users'].search([('id', '=', self._uid)])
-        create_user = self.env['res.users'].search([('id', '=', self.create_uid.id)])
-        if self.prive:
-            if connect_user.has_group('agentis.agentis_dga_users') and create_user.has_group('agentis.agentis_dga'):
-                warning_mess = {
-                    'title': _('Avertissement !'),
-                    'message': _("Vous ne pouvez pas modifier l'état de cette opération")
-                }
-                self.user_instance = False
-                return {'warning': warning_mess}
-            else:
-                self.prive = self.user_instance
-
-    @api.onchange('prive')
-    def onchange_prive(self):
-        if not self.prive:
-            self.user_instance = self.prive
 
     @api.depends('somme')
     def get_total_somme(self):
@@ -148,56 +126,12 @@ class AgentisDGA(models.Model):
         for som in self:
             som.somme_char = '{:,}'.format(abs(som.somme)).replace(',', ' ')
 
-    def create_enter(self):
-        enter_out = self.check_in_out
-        if enter_out == 'entrer':
-            """
-            vals = {
-                'create_date': self.create_date,
-                'libele': self.libele,
-                'name': self.name,
-                'nature_payment': self.nature_payment,
-                'payment_with': self.payment_with,
-                'payment_with_employee': self.payment_with_employee.id,
-                'payment_with_other': self.payment_with_other.id,
-                'beneficiaire': self.beneficiaire.id,
-                'check_in_out': self.check_in_out,
-                'somme': self.somme,
-                'update': self.update,
-                'update_by': self.update_by.id,
-                'visibility': self.visibility,
-                'chantier_id': self.chantier_id.id,
-                'etat': self.etat,
-
-            }
-            self.env['agentis.dga'].create(vals)"""
-
-            return {
-                'type': 'ir.actions.act_window',
-                'name': 'Caisse DGA',
-                'view_mode': 'tree,form',
-                'tag': 'history_back',
-                'target': 'inline',
-                'res_model': 'agentis.dga'
-            }
-        else:
-            raise ValidationError("l'entrée/sortie n'est pas une entrée")
-
     @api.depends('somme')
     def get_solde(self):
         amount = 0
         for agentis_dga in self:
             amount = amount + agentis_dga.somme
             agentis_dga.solde = amount
-
-    @api.model
-    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
-        res = super().fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
-        res_user = self.env['res.users'].search([('id', '=', self._uid)])
-        if view_type == 'tree' and res_user.has_group('agentis.agentis_dga_prive'):
-            self.get_somme_out()
-            self.get_somme_in()
-        return res
 
     @api.depends('somme')
     def get_somme_in(self):
@@ -209,7 +143,6 @@ class AgentisDGA(models.Model):
                     > 0  GROUP BY agentis_dga.status,agentis_dga.prive ORDER BY somme '''
         self._cr.execute(query, {'default_date': default_date})
         docs = self._cr.dictfetchall()
-        print("docs ..........", docs)
         if len(docs) != 0:
             office_manager_search = self.env['agentis.dga'].search(
                 [('is_create', '=', True),
@@ -272,9 +205,92 @@ class AgentisDGA(models.Model):
                 })
                 self.env['agentis.dga'].create(val)
 
-    def generate_update(self):
-        locale_time = datetime.now()
-        return locale_time
+    @api.onchange('user_instance')
+    def onchange_user_instance(self):
+        connect_user = self.env['res.users'].search([('id', '=', self._uid)])
+        create_user = self.env['res.users'].search([('id', '=', self.create_uid.id)])
+        if self.prive:
+            if connect_user.has_group('agentis.agentis_dga_users') and create_user.has_group('agentis.agentis_dga'):
+                warning_mess = {
+                    'title': _('Avertissement !'),
+                    'message': _("Vous ne pouvez pas modifier l'état de cette opération")
+                }
+                self.user_instance = False
+                return {'warning': warning_mess}
+            else:
+                self.prive = self.user_instance
+
+    @api.onchange('prive')
+    def onchange_prive(self):
+        for val in self:
+            if not val.prive:
+                val.user_instance = val.prive
+            elif val.prive:
+                val.beneficiaire_is_fournisseur = False
+                val.payment_with_other = False
+                val.beneficiaire_employee = False
+
+    @api.onchange('beneficiaire_is_fournisseur', 'beneficiaire_employee')
+    def onchange_beneficaire_for_user(self):
+        for val in self:
+            if not val.prive:
+                if val.beneficiaire_is_fournisseur:
+                    val.private_beneficial = val.beneficiaire_is_fournisseur or val.payment_with_other
+
+                elif val.beneficiaire_employee:
+                    val.private_beneficial_employee = val.beneficiaire_employee
+
+    @api.onchange('private_beneficial')
+    def onchange_private_beneficial(self):
+        for val in self:
+            if not val.prive:
+                if val.private_beneficial:
+                    val.beneficiaire_is_fournisseur = val.private_beneficial
+                    val.payment_with_other = val.private_beneficial
+
+                elif val.private_beneficial_employee:
+                    val.beneficiaire_employee = val.private_beneficial_employee
+
+    '''
+    modification des donnees prives lorsqu'on se connecte en tant qu'un utilisateur dga prive
+    '''
+
+    @api.model
+    def fields_view_get(self, view_id=None, view_type='form', toolbar=False, submenu=False):
+        res = super().fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
+        res_user = self.env['res.users'].search([('id', '=', self._uid)])
+        if view_type == 'tree' and res_user.has_group('agentis.agentis_dga_prive'):
+            self.get_somme_out()
+            self.get_somme_in()
+        return res
+
+    '''
+    retire des chapms dans la vue search
+    '''
+
+    @api.model
+    def fields_get(self, allfields=None, attributes=None):
+        res = super(AgentisDGA, self).fields_get(allfields, attributes=attributes)
+        res_user = self.env['res.users'].search([('id', '=', self._uid)])
+        if res_user.has_group('agentis.agentis_dga_users') and not res_user.has_group('agentis.agentis_dga'):
+            hide_fields = ['no_see_dga', 'etat', 'update', 'private_beneficial', 'private_beneficial_employee',
+                           'update_by', 'analytic_user_id']
+            for fld in hide_fields:
+                if fld in res:
+                    res[fld]['selectable'] = False
+                    res[fld]['sortable'] = False
+                    res[fld]['searchable'] = False
+                    res[fld]['exportable'] = False
+        elif res_user.has_group('agentis.agentis_dga'):
+            hide_fields = ['no_see_dga', 'etat', 'nature_operation_id', 'update', 'update_by',
+                           'beneficiaire_is_fournisseur', 'beneficiaire_employee', 'libele', 'analytic_user_id']
+            for fld in hide_fields:
+                if fld in res:
+                    res[fld]['selectable'] = False
+                    res[fld]['sortable'] = False
+                    res[fld]['searchable'] = False
+                    res[fld]['exportable'] = False
+        return res
 
     @api.model
     def create(self, vals):
@@ -296,12 +312,25 @@ class AgentisDGA(models.Model):
         else:
             vals.update({'analytic_user_id': vals.get('chantier_id')})
         if vals.get('user_instance'):
-            vals.update({'prive': True})
+            vals.update({'prive': True,
+                         'beneficiaire_is_fournisseur': False,
+                         'payment_with_other': False,
+                         'beneficiaire_employee': False
+                         })
         vals['update_by'] = self.env.uid
         vals['update'] = self.generate_update()
         vals['etat'] = True
         result = super(AgentisDGA, self).create(vals)
         return result
+
+    @api.returns('self', lambda value: value.id)
+    def copy(self, default=None):
+        default = dict(default or {})
+        if 'name' not in default:
+            default['name'] = _("%s (Copy)") % self.name
+        if 'status' not in default:
+            default['status'] = 'brouillon'
+        return super(AgentisDGA, self).copy(default=default)
 
     def write(self, vals):
 
@@ -326,7 +355,11 @@ class AgentisDGA(models.Model):
         if chantier_user:
             vals.update({'chantier_id': vals.get('analytic_user_id')})
         if vals.get('user_instance'):
-            vals.update({'prive': True})
+            vals.update({'prive': True,
+                         'beneficiaire_is_fournisseur': False,
+                         'payment_with_other': False,
+                         'beneficiaire_employee': False
+                         })
         vals['update_by'] = self.env.uid
         vals['update'] = self.generate_update()
         result = super(AgentisDGA, self).write(vals)
@@ -353,14 +386,9 @@ class AgentisDGA(models.Model):
 
         return super(AgentisDGA, self).unlink()
 
-    @api.returns('self', lambda value: value.id)
-    def copy(self, default=None):
-        default = dict(default or {})
-        if 'name' not in default:
-            default['name'] = _("%s (Copy)") % self.name
-        if 'status' not in default:
-            default['status'] = 'brouillon'
-        return super(AgentisDGA, self).copy(default=default)
+    def generate_update(self):
+        locale_time = datetime.now()
+        return locale_time
 
     def make_payment(self):
         action = {'type': 'ir.actions.act_window', 'name': 'Caisse DGA', 'view_mode': 'form', 'target': 'new',
@@ -373,6 +401,10 @@ class AgentisDGA(models.Model):
         }
         action['context'] = context
         return action
+
+    def export_data_pdf(self):
+        data = {'ids': self.ids}
+        return self.env.ref('agentis.agentis_dga_principale_pdf').report_action([], data=data)
 
     def put_suspense(self):
         self.status = 'attente'
@@ -387,6 +419,29 @@ class AgentisDGA(models.Model):
         if employee:
             partner = self.env['res.partner'].sudo().search([('user_associe_id', '=', employee.id)])
             return partner.id
+
+    def update_private_beneficial(self):
+        all_data = self.env['agentis.dga'].search([])
+        for val in all_data:
+            if val.beneficiaire_is == 'employee':
+                print('00000000000000000000', val.beneficiaire_employee)
+                val.write({'private_beneficial_employee': val.beneficiaire_employee.id})
+                if val.prive:
+                    val.beneficiaire_employee = False
+            else:
+
+                if val.beneficiaire_is_fournisseur:
+                    val.write({'private_beneficial': val.beneficiaire_is_fournisseur.id
+                               })
+                    print('test .................beneficiaire_is_fournisseur', val.beneficiaire_is_fournisseur)
+                elif val.payment_with_other:
+                    val.write({'private_beneficial': val.payment_with_other.id
+                               })
+                    print('test .................payment_with_other', val.payment_with_other)
+
+                if val.prive:
+                    val.beneficiaire_is_fournisseur = False
+                    val.payment_with_other = False
 
     def validate_operation(self):
         for dga in self:
@@ -472,6 +527,41 @@ class AgentisDGA(models.Model):
 """
 
         return True
+
+    def create_enter(self):
+        enter_out = self.check_in_out
+        if enter_out == 'entrer':
+            """
+            vals = {
+                'create_date': self.create_date,
+                'libele': self.libele,
+                'name': self.name,
+                'nature_payment': self.nature_payment,
+                'payment_with': self.payment_with,
+                'payment_with_employee': self.payment_with_employee.id,
+                'payment_with_other': self.payment_with_other.id,
+                'beneficiaire': self.beneficiaire.id,
+                'check_in_out': self.check_in_out,
+                'somme': self.somme,
+                'update': self.update,
+                'update_by': self.update_by.id,
+                'visibility': self.visibility,
+                'chantier_id': self.chantier_id.id,
+                'etat': self.etat,
+
+            }
+            self.env['agentis.dga'].create(vals)"""
+
+            return {
+                'type': 'ir.actions.act_window',
+                'name': 'Caisse DGA',
+                'view_mode': 'tree,form',
+                'tag': 'history_back',
+                'target': 'inline',
+                'res_model': 'agentis.dga'
+            }
+        else:
+            raise ValidationError("l'entrée/sortie n'est pas une entrée")
 
     def put_draft(self):
         self.status = 'brouillon'
