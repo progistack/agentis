@@ -43,7 +43,7 @@
                 <header>
                     <button name="export_data_pdf" type="object" string="Exporter en pdf" class="oe_highlight"/>
 <!--                    &lt;!&ndash;<button name="get_nature_operation" type="object" string="TEST NATURE" class="oe_highlight"/>-->
-                    <button name="update_private_beneficial" type="object" string="mise donner privee" class="oe_highlight"/>
+                    <button name="update_private_beneficial" type="object" string="mise a jour donnée" class="oe_highlight"/>
                 </header>
                 <field name="num_caisse"/>
                 <field name="libele" width="2" attrs="{'invisible':[('prive','=',True)]}"/>

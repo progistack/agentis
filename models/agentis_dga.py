@@ -240,17 +240,6 @@ class AgentisDGA(models.Model):
                 elif val.beneficiaire_employee:
                     val.private_beneficial_employee = val.beneficiaire_employee
 
-    @api.onchange('private_beneficial')
-    def onchange_private_beneficial(self):
-        for val in self:
-            if not val.prive:
-                if val.private_beneficial:
-                    val.beneficiaire_is_fournisseur = val.private_beneficial
-                    val.payment_with_other = val.private_beneficial
-
-                elif val.private_beneficial_employee:
-                    val.beneficiaire_employee = val.private_beneficial_employee
-
     '''
     modification des donnees prives lorsqu'on se connecte en tant qu'un utilisateur dga prive
     '''
@@ -424,24 +413,27 @@ class AgentisDGA(models.Model):
         all_data = self.env['agentis.dga'].search([])
         for val in all_data:
             if val.beneficiaire_is == 'employee':
-                print('00000000000000000000', val.beneficiaire_employee)
-                val.write({'private_beneficial_employee': val.beneficiaire_employee.id})
-                if val.prive:
-                    val.beneficiaire_employee = False
-            else:
-
-                if val.beneficiaire_is_fournisseur:
-                    val.write({'private_beneficial': val.beneficiaire_is_fournisseur.id
-                               })
-                    print('test .................beneficiaire_is_fournisseur', val.beneficiaire_is_fournisseur)
-                elif val.payment_with_other:
-                    val.write({'private_beneficial': val.payment_with_other.id
-                               })
-                    print('test .................payment_with_other', val.payment_with_other)
-
                 if val.prive:
                     val.beneficiaire_is_fournisseur = False
-                    val.payment_with_other = False
+            # if val.beneficiaire_is == 'employee':
+            #     print('00000000000000000000', val.beneficiaire_employee)
+            #     val.write({'private_beneficial_employee': val.beneficiaire_employee.id})
+            #     if val.prive:
+            #         val.beneficiaire_employee = False
+            # else:
+            #
+            #     if val.beneficiaire_is_fournisseur:
+            #         val.write({'private_beneficial': val.beneficiaire_is_fournisseur.id
+            #                    })
+            #         print('test .................beneficiaire_is_fournisseur', val.beneficiaire_is_fournisseur)
+            #     elif val.payment_with_other:
+            #         val.write({'private_beneficial': val.payment_with_other.id
+            #                    })
+            #         print('test .................payment_with_other', val.payment_with_other)
+            #
+            #     if val.prive:
+            #         val.beneficiaire_is_fournisseur = False
+            #         val.payment_with_other = False
 
     def validate_operation(self):
         for dga in self:
