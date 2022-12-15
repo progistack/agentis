@@ -453,6 +453,8 @@ class AgentisDGA(models.Model):
                                 val.pop('nature_operation')
                                 val.pop('analytic_user_id')
                                 val.pop('user_instance')
+                                val.pop('private_beneficial_employee')
+                                val.pop('private_beneficial')
                                 val['beneficiaire_is'] = 'dga'
                                 val['check_in_out'] = 'entrer'
                                 val['status'] = 'valide'
@@ -471,6 +473,8 @@ class AgentisDGA(models.Model):
                             val.pop('nature_operation')
                             val.pop('analytic_user_id')
                             val.pop('user_instance')
+                            val.pop('private_beneficial_employee')
+                            val.pop('private_beneficial')
                             val['beneficiaire_is'] = 'dga'
                             val['check_in_out'] = 'entrer'
                             val['status'] = 'valide'
