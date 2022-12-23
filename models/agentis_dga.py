@@ -560,12 +560,11 @@ class AgentisDGA(models.Model):
             raise ValidationError("l'entrée/sortie n'est pas une entrée")
 
     def put_draft(self):
+        if self.prive:
+            raise ValidationError(
+                _("Cette action ne peut être effectuer que par le DGA"))
         self.status = 'brouillon'
-        if self.check_in_out == 'entrer':
-            caisse_line = self.env['account.bank.statement.line'].sudo().search([('caisse_id', '=', self.id)])
-            if caisse_line:
-                print('............')
-                # caisse_line.unlink()
+
         if self.check_in_out == 'transfert':
             manager = self.env['office.manager'].sudo().search([('caisse_id', '=', 'TRANS' + str(self.id))])
             if manager:
